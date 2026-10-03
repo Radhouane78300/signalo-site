@@ -1,0 +1,4 @@
+# Brief local (contient des chemins de ton ordinateur)
+site.json
+__pycache__/
+*.pyc
