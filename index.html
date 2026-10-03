@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Signalo — Signalez, améliorez votre ville</title>
-<meta name="description" content="Signalo permet de signaler un problème du quotidien en quelques secondes — dépôt sauvage, éclairage, voirie — et de suivre en temps réel sa prise en charge par votre mairie.">
-<link rel="stylesheet" href="./css/styles.css?v=20261003d">
+<title>Signalo — Signaler. Améliorer. Votre ville.</title>
+<meta name="description" content="Signalo, la plateforme 100 % IA qui transforme chaque signalement citoyen en action concrète pour la ville : je signale, l'IA analyse, la mairie agit, le problème est résolu.">
+<link rel="stylesheet" href="./css/styles.css?v=20261004k">
+<link rel="stylesheet" href="./css/signalo.css?v=20261004k">
 <script type="importmap">
 {
   "imports": {
@@ -14,6 +15,7 @@
   }
 }
 </script>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 <div class="loader" id="loader" role="status" aria-live="polite">
@@ -62,204 +64,552 @@
 <div class="cursor-inner"></div>
 <div class="cursor-outer"><span class="cursor-ticks"><span></span><span></span><span></span><span></span></span></div>
 <div class="cursor-label" aria-hidden="true">000</div>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g-lamp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8ffb0" stop-opacity=".55"/><stop offset="1" stop-color="#e8ffb0" stop-opacity="0"/></linearGradient>
+    <linearGradient id="g-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d140e"/><stop offset="1" stop-color="#141d15"/></linearGradient>
+  </defs>
+  <symbol id="i-mark" viewBox="0 0 100 100"><path fill-rule="evenodd" d="M0.00 28.66 L0.00 28.28 L0.01 27.89 L0.02 27.51 L0.04 27.12 L0.06 26.74 L0.09 26.36 L0.13 25.97 L0.17 25.59 L0.21 25.21 L0.26 24.83 L0.31 24.44 L0.37 24.06 L0.44 23.69 L0.50 23.31 L0.58 22.93 L0.66 22.55 L0.74 22.18 L0.83 21.80 L0.93 21.43 L1.03 21.06 L1.13 20.69 L1.24 20.32 L1.36 19.95 L1.48 19.59 L1.60 19.22 L1.73 18.86 L1.86 18.50 L2.00 18.14 L2.15 17.78 L2.29 17.43 L2.45 17.07 L2.60 16.72 L2.77 16.38 L2.93 16.03 L3.11 15.68 L3.28 15.34 L3.46 15.00 L3.65 14.67 L3.84 14.33 L4.03 14.00 L4.23 13.67 L4.44 13.34 L4.65 13.02 L4.86 12.70 L5.07 12.38 L5.29 12.07 L5.52 11.75 L5.75 11.44 L5.98 11.14 L6.22 10.83 L6.46 10.54 L6.71 10.24 L6.96 9.95 L7.21 9.66 L7.47 9.37 L7.73 9.09 L7.99 8.81 L8.26 8.53 L8.53 8.26 L8.81 7.99 L9.09 7.73 L9.37 7.47 L9.66 7.21 L9.95 6.96 L10.24 6.71 L10.54 6.46 L10.83 6.22 L11.14 5.98 L11.44 5.75 L11.75 5.52 L12.07 5.29 L12.38 5.07 L12.70 4.86 L13.02 4.65 L13.34 4.44 L13.67 4.23 L14.00 4.03 L14.33 3.84 L14.67 3.65 L15.00 3.46 L15.34 3.28 L15.68 3.11 L16.03 2.93 L16.38 2.77 L16.72 2.60 L17.07 2.45 L17.43 2.29 L17.78 2.15 L18.14 2.00 L18.50 1.86 L18.86 1.73 L19.22 1.60 L19.59 1.48 L19.95 1.36 L20.32 1.24 L20.69 1.13 L21.06 1.03 L21.43 0.93 L21.80 0.83 L22.18 0.74 L22.55 0.66 L22.93 0.58 L23.31 0.50 L23.69 0.44 L24.06 0.37 L24.44 0.31 L24.83 0.26 L25.21 0.21 L25.59 0.17 L25.97 0.13 L26.36 0.09 L26.74 0.06 L27.12 0.04 L27.51 0.02 L27.89 0.01 L28.28 0.00 L28.66 0.00 L71.34 0.00 L71.72 0.00 L72.11 0.01 L72.49 0.02 L72.88 0.04 L73.26 0.06 L73.64 0.09 L74.03 0.13 L74.41 0.17 L74.79 0.21 L75.17 0.26 L75.56 0.31 L75.94 0.37 L76.31 0.44 L76.69 0.50 L77.07 0.58 L77.45 0.66 L77.82 0.74 L78.20 0.83 L78.57 0.93 L78.94 1.03 L79.31 1.13 L79.68 1.24 L80.05 1.36 L80.41 1.48 L80.78 1.60 L81.14 1.73 L81.50 1.86 L81.86 2.00 L82.22 2.15 L82.57 2.29 L82.93 2.45 L83.28 2.60 L83.62 2.77 L83.97 2.93 L84.32 3.11 L84.66 3.28 L85.00 3.46 L85.33 3.65 L85.67 3.84 L86.00 4.03 L86.33 4.23 L86.66 4.44 L86.98 4.65 L87.30 4.86 L87.62 5.07 L87.93 5.29 L88.25 5.52 L88.56 5.75 L88.86 5.98 L89.17 6.22 L89.46 6.46 L89.76 6.71 L90.05 6.96 L90.34 7.21 L90.63 7.47 L90.91 7.73 L91.19 7.99 L91.47 8.26 L91.74 8.53 L92.01 8.81 L92.27 9.09 L92.53 9.37 L92.79 9.66 L93.04 9.95 L93.29 10.24 L93.54 10.54 L93.78 10.83 L94.02 11.14 L94.25 11.44 L94.48 11.75 L94.71 12.07 L94.93 12.38 L95.14 12.70 L95.35 13.02 L95.56 13.34 L95.77 13.67 L95.97 14.00 L96.16 14.33 L96.35 14.67 L96.54 15.00 L96.72 15.34 L96.89 15.68 L97.07 16.03 L97.23 16.38 L97.40 16.72 L97.55 17.07 L97.71 17.43 L97.85 17.78 L98.00 18.14 L98.14 18.50 L98.27 18.86 L98.40 19.22 L98.52 19.59 L98.64 19.95 L98.76 20.32 L98.87 20.69 L98.97 21.06 L99.07 21.43 L99.17 21.80 L99.26 22.18 L99.34 22.55 L99.42 22.93 L99.50 23.31 L99.56 23.69 L99.63 24.06 L99.69 24.44 L99.74 24.83 L99.79 25.21 L99.83 25.59 L99.87 25.97 L99.91 26.36 L99.94 26.74 L99.96 27.12 L99.98 27.51 L99.99 27.89 L100.00 28.28 L100.00 28.66 L100.00 71.34 L100.00 71.72 L99.99 72.11 L99.98 72.49 L99.96 72.88 L99.94 73.26 L99.91 73.64 L99.87 74.03 L99.83 74.41 L99.79 74.79 L99.74 75.17 L99.69 75.56 L99.63 75.94 L99.56 76.31 L99.50 76.69 L99.42 77.07 L99.34 77.45 L99.26 77.82 L99.17 78.20 L99.07 78.57 L98.97 78.94 L98.87 79.31 L98.76 79.68 L98.64 80.05 L98.52 80.41 L98.40 80.78 L98.27 81.14 L98.14 81.50 L98.00 81.86 L97.85 82.22 L97.71 82.57 L97.55 82.93 L97.40 83.28 L97.23 83.62 L97.07 83.97 L96.89 84.32 L96.72 84.66 L96.54 85.00 L96.35 85.33 L96.16 85.67 L95.97 86.00 L95.77 86.33 L95.56 86.66 L95.35 86.98 L95.14 87.30 L94.93 87.62 L94.71 87.93 L94.48 88.25 L94.25 88.56 L94.02 88.86 L93.78 89.17 L93.54 89.46 L93.29 89.76 L93.04 90.05 L92.79 90.34 L92.53 90.63 L92.27 90.91 L92.01 91.19 L91.74 91.47 L91.47 91.74 L91.19 92.01 L90.91 92.27 L90.63 92.53 L90.34 92.79 L90.05 93.04 L89.76 93.29 L89.46 93.54 L89.17 93.78 L88.86 94.02 L88.56 94.25 L88.25 94.48 L87.93 94.71 L87.62 94.93 L87.30 95.14 L86.98 95.35 L86.66 95.56 L86.33 95.77 L86.00 95.97 L85.67 96.16 L85.33 96.35 L85.00 96.54 L84.66 96.72 L84.32 96.89 L83.97 97.07 L83.62 97.23 L83.28 97.40 L82.93 97.55 L82.57 97.71 L82.22 97.85 L81.86 98.00 L81.50 98.14 L81.14 98.27 L80.78 98.40 L80.41 98.52 L80.05 98.64 L79.68 98.76 L79.31 98.87 L78.94 98.97 L78.57 99.07 L78.20 99.17 L77.82 99.26 L77.45 99.34 L77.07 99.42 L76.69 99.50 L76.31 99.56 L75.94 99.63 L75.56 99.69 L75.17 99.74 L74.79 99.79 L74.41 99.83 L74.03 99.87 L73.64 99.91 L73.26 99.94 L72.88 99.96 L72.49 99.98 L72.11 99.99 L71.72 100.00 L71.34 100.00 L28.66 100.00 L28.28 100.00 L27.89 99.99 L27.51 99.98 L27.12 99.96 L26.74 99.94 L26.36 99.91 L25.97 99.87 L25.59 99.83 L25.21 99.79 L24.83 99.74 L24.44 99.69 L24.06 99.63 L23.69 99.56 L23.31 99.50 L22.93 99.42 L22.55 99.34 L22.18 99.26 L21.80 99.17 L21.43 99.07 L21.06 98.97 L20.69 98.87 L20.32 98.76 L19.95 98.64 L19.59 98.52 L19.22 98.40 L18.86 98.27 L18.50 98.14 L18.14 98.00 L17.78 97.85 L17.43 97.71 L17.07 97.55 L16.72 97.40 L16.38 97.23 L16.03 97.07 L15.68 96.89 L15.34 96.72 L15.00 96.54 L14.67 96.35 L14.33 96.16 L14.00 95.97 L13.67 95.77 L13.34 95.56 L13.02 95.35 L12.70 95.14 L12.38 94.93 L12.07 94.71 L11.75 94.48 L11.44 94.25 L11.14 94.02 L10.83 93.78 L10.54 93.54 L10.24 93.29 L9.95 93.04 L9.66 92.79 L9.37 92.53 L9.09 92.27 L8.81 92.01 L8.53 91.74 L8.26 91.47 L7.99 91.19 L7.73 90.91 L7.47 90.63 L7.21 90.34 L6.96 90.05 L6.71 89.76 L6.46 89.46 L6.22 89.17 L5.98 88.86 L5.75 88.56 L5.52 88.25 L5.29 87.93 L5.07 87.62 L4.86 87.30 L4.65 86.98 L4.44 86.66 L4.23 86.33 L4.03 86.00 L3.84 85.67 L3.65 85.33 L3.46 85.00 L3.28 84.66 L3.11 84.32 L2.93 83.97 L2.77 83.62 L2.60 83.28 L2.45 82.93 L2.29 82.57 L2.15 82.22 L2.00 81.86 L1.86 81.50 L1.73 81.14 L1.60 80.78 L1.48 80.41 L1.36 80.05 L1.24 79.68 L1.13 79.31 L1.03 78.94 L0.93 78.57 L0.83 78.20 L0.74 77.82 L0.66 77.45 L0.58 77.07 L0.50 76.69 L0.44 76.31 L0.37 75.94 L0.31 75.56 L0.26 75.17 L0.21 74.79 L0.17 74.41 L0.13 74.03 L0.09 73.64 L0.06 73.26 L0.04 72.88 L0.02 72.49 L0.01 72.11 L0.00 71.72 L0.00 71.34 Z M22.93 51.07 L22.76 51.26 L22.60 51.47 L22.45 51.68 L22.32 51.90 L22.19 52.13 L22.08 52.36 L21.99 52.60 L21.90 52.85 L21.83 53.10 L21.77 53.35 L21.73 53.61 L21.70 53.86 L21.69 54.12 L21.69 54.38 L21.71 54.64 L21.74 54.90 L21.78 55.15 L21.84 55.41 L21.91 55.65 L22.00 55.90 L22.10 56.14 L22.21 56.37 L22.34 56.60 L22.48 56.82 L22.63 57.03 L22.79 57.23 L22.97 57.42 L23.15 57.61 L23.34 57.78 L23.55 57.94 L23.76 58.09 L23.98 58.23 L24.20 58.35 L24.44 58.46 L24.68 58.56 L24.92 58.65 L25.17 58.72 L25.42 58.78 L25.68 58.82 L25.94 58.85 L26.20 58.86 L45.19 59.40 L45.45 59.43 L45.70 59.51 L45.92 59.63 L46.13 59.79 L46.30 59.98 L46.43 60.20 L46.53 60.45 L46.57 60.70 L46.57 60.96 L46.53 61.21 L42.01 77.35 L41.95 77.59 L41.90 77.84 L41.86 78.10 L41.85 78.35 L41.84 78.61 L41.85 78.86 L41.88 79.12 L41.91 79.37 L41.97 79.62 L42.03 79.86 L42.12 80.11 L42.21 80.34 L42.32 80.57 L42.44 80.80 L42.57 81.02 L42.72 81.23 L42.87 81.43 L43.04 81.62 L43.22 81.80 L43.41 81.97 L43.61 82.13 L43.82 82.28 L44.03 82.42 L44.25 82.54 L44.48 82.66 L44.72 82.75 L44.96 82.84 L45.20 82.91 L45.45 82.97 L45.70 83.01 L45.96 83.04 L46.21 83.05 L46.47 83.05 L46.72 83.04 L46.97 83.01 L47.23 82.97 L47.47 82.91 L47.72 82.84 L47.96 82.75 L48.20 82.65 L48.42 82.54 L48.65 82.42 L48.86 82.28 L49.07 82.13 L49.27 81.97 L49.46 81.80 L49.63 81.62 L80.30 48.57 L80.47 48.37 L80.63 48.17 L80.77 47.96 L80.91 47.74 L81.03 47.51 L81.14 47.27 L81.24 47.03 L81.32 46.79 L81.39 46.54 L81.45 46.29 L81.49 46.03 L81.52 45.77 L81.53 45.51 L81.53 45.26 L81.51 45.00 L81.48 44.74 L81.44 44.49 L81.38 44.23 L81.31 43.98 L81.22 43.74 L81.12 43.50 L81.01 43.27 L80.88 43.04 L80.74 42.82 L80.59 42.61 L80.43 42.41 L80.26 42.22 L80.07 42.04 L79.88 41.86 L79.68 41.70 L79.46 41.55 L79.24 41.42 L79.02 41.29 L78.78 41.18 L78.54 41.08 L78.30 41.00 L78.05 40.92 L77.80 40.87 L77.54 40.82 L77.29 40.79 L77.03 40.78 L58.05 40.24 L57.79 40.21 L57.54 40.13 L57.31 40.01 L57.11 39.85 L56.93 39.65 L56.80 39.43 L56.71 39.18 L56.67 38.92 L56.67 38.66 L56.72 38.41 L61.68 21.88 L61.75 21.63 L61.80 21.38 L61.84 21.12 L61.86 20.86 L61.87 20.60 L61.86 20.34 L61.84 20.08 L61.80 19.83 L61.75 19.57 L61.68 19.32 L61.60 19.07 L61.50 18.83 L61.39 18.60 L61.27 18.37 L61.13 18.15 L60.98 17.93 L60.82 17.73 L60.65 17.53 L60.46 17.35 L60.27 17.18 L60.06 17.02 L59.85 16.87 L59.63 16.73 L59.40 16.61 L59.16 16.50 L58.92 16.41 L58.67 16.33 L58.42 16.26 L58.17 16.21 L57.91 16.17 L57.65 16.15 L57.39 16.14 L57.13 16.15 L56.87 16.18 L56.61 16.21 L56.36 16.27 L56.11 16.34 L55.86 16.42 L55.62 16.52 L55.39 16.63 L55.16 16.75 L54.94 16.89 L54.72 17.04 L54.52 17.20 L54.33 17.38 L54.15 17.56 Z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.2" r="3.6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-3.8 3.7-6 7.5-6s6.7 2.2 7.5 6"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></symbol>
+  <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><path d="M4 12h16"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4.5h11l-2 3.8 2 3.7H5"/></symbol>
+  <symbol id="i-mairie" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M4.5 9.5 12 5l7.5 4.5"/><path d="M6 10.5v7M10 10.5v7M14 10.5v7M18 10.5v7"/><path d="M12 5V2.2l2.6.9-2.6.9"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5 5L4 17l3 3 5.7-5.7a4 4 0 0 0 5-5l-2.5 2.5-2.8-.7-.7-2.8z"/></symbol>
+  <symbol id="i-helmet" viewBox="0 0 24 24"><path d="M3.5 17.5h17"/><path d="M5.5 17.5V14a6.5 6.5 0 0 1 13 0v3.5"/><path d="M10 8.2V5.8h4v2.4"/></symbol>
+  <symbol id="i-camera-check" viewBox="0 0 24 24"><path d="M4 8h3l1.6-2.2h6.8L17 8h3v11H4z"/><path d="m9.4 13.3 1.9 1.9 3.4-3.6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9.5 7V4.5h5V7"/><path d="m6 7 1 12.5c.1 1 .9 1.5 1.8 1.5h6.4c.9 0 1.7-.5 1.8-1.5L18 7"/></symbol>
+  <symbol id="i-road" viewBox="0 0 24 24"><path d="M8 3 4 21M16 3l4 18"/><path d="M12 4v2.5M12 10.5v3M12 17.5V20"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2V17h5v-1c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/><path d="M9.5 20.5h5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 15.5c.2 1.6.9 2.3 2.5 2.5-1.6.2-2.3.9-2.5 2.5-.2-1.6-.9-2.3-2.5-2.5 1.6-.2 2.3-.9 2.5-2.5z"/></symbol>
+  <symbol id="i-bench" viewBox="0 0 24 24"><path d="M3.5 10h17M3.5 14h17"/><path d="M6 14v5M18 14v5M6 10V7M18 10V7"/></symbol>
+  <symbol id="i-sign" viewBox="0 0 24 24"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z"/><path d="M12 8v5M12 16v.1"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.5v-8a1 1 0 0 1 1-1h8l8 8-9 9z"/><circle cx="8.5" cy="8.5" r="1.5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 17 4-5"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14"/><path d="M21 3 14.5 21 10 14 3 9.5z"/></symbol>
+  <symbol id="i-track" viewBox="0 0 24 24"><path d="m3 17 5-5 4 4 8-8"/><path d="M15 8h5v5"/></symbol>
+  <symbol id="i-bus" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="14" rx="2.5"/><path d="M5 11h14M8 20.5v-3M16 20.5v-3"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="m11.2 11.8 8.3-8.3M16.5 6.5 19 9M14.5 8.5l2 2"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6z"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.1M4.5 12h.1M4.5 18h.1"/></symbol>
+  <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><path d="M16 5.6a3 3 0 0 1 0 5.8M17.5 14.3c1.6.6 2.7 2.3 3 4.7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.7 2.7 5.5-5.4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+
+  <!-- Street scene shared by the phone, the AI frame and the before / after -->
+  <symbol id="scene-street" viewBox="0 0 400 260">
+    <rect width="400" height="260" fill="#0a100b"/>
+    <rect width="400" height="170" fill="url(#g-wall)"/>
+    <g stroke="#1a241b" stroke-width="1.2">
+      <path d="M0 30h400M0 58h400M0 86h400M0 114h400M0 142h400"/>
+      <path d="M40 30v28M120 30v28M200 30v28M280 30v28M360 30v28M80 58v28M160 58v28M240 58v28M320 58v28M40 86v28M120 86v28M200 86v28M280 86v28M360 86v28M80 114v28M160 114v28M240 114v28M320 114v28M40 142v28M120 142v28M200 142v28M280 142v28M360 142v28"/>
+    </g>
+    <path d="M300 60 262 170h86L318 60z" fill="url(#g-lamp)" opacity=".5"/>
+    <path d="M340 170V42" stroke="#2c372d" stroke-width="5"/>
+    <path d="M340 46h-24" stroke="#2c372d" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="312" cy="52" rx="11" ry="4.5" fill="#e8ffb0"/>
+    <path d="M0 170h400v90H0z" fill="#151c16"/>
+    <path d="M0 170h400" stroke="#2f3b30" stroke-width="2.5"/>
+    <path d="M0 226h400" stroke="#202921" stroke-width="1.5"/>
+    <path d="M60 170v56M150 170v56M240 170v56M330 170v56M105 226v34M195 226v34M285 226v34M375 226v34" stroke="#1d251e" stroke-width="1.2"/>
+  </symbol>
+  <symbol id="scene-depot" viewBox="0 0 400 260">
+    <use href="#scene-street"/>
+    <ellipse cx="185" cy="208" rx="135" ry="20" fill="#ff5a5f" opacity=".14"/>
+    <g transform="rotate(-11 118 140)">
+      <rect x="66" y="88" width="100" height="78" rx="11" fill="#3a3326" stroke="#5c513b" stroke-width="2"/>
+      <path d="M76 107h80M76 126h80M76 145h80" stroke="#4b4231" stroke-width="2"/>
+    </g>
+    <path d="M182 152 222 143l24 14-40 10z" fill="#6a5230"/>
+    <path d="M182 152v34l24 7v-26z" fill="#54401f"/>
+    <path d="M206 167v26l40-10v-26z" fill="#433318"/>
+    <path d="M206 167 246 157" stroke="#7c6339" stroke-width="1.5"/>
+    <path d="M118 212c-24 0-33-15-26-32 4-12 15-19 23-21l-2-9 10 5 7-6 1 10c13 4 22 15 22 28 0 16-12 25-35 25z" fill="#252b26" stroke="#414a42" stroke-width="2"/>
+    <path d="M268 214c-19 0-27-12-21-26 4-10 12-15 19-17l-1-7 8 4 6-5v8c11 3 18 12 18 22 0 13-10 21-29 21z" fill="#1f2520" stroke="#3a433b" stroke-width="2"/>
+    <path d="M160 214c-14 0-19-9-15-19 3-6 9-10 14-11l-1-6 6 3 5-4v7c8 2 13 9 13 16 0 9-7 14-22 14z" fill="#2d332d" stroke="#465046" stroke-width="2"/>
+    <path d="M300 205h22l-3 9h-18z" fill="#3b4a5a"/>
+    <circle cx="232" cy="214" r="3" fill="#59625a"/><circle cx="84" cy="216" r="2.5" fill="#59625a"/><path d="M200 220l10-3" stroke="#59625a" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="scene-clean" viewBox="0 0 400 260">
+    <use href="#scene-street"/>
+    <ellipse cx="200" cy="210" rx="150" ry="18" fill="#a8e231" opacity=".12"/>
+    <path d="M104 178h118M104 190h118" stroke="#6f8f3f" stroke-width="6" stroke-linecap="round"/>
+    <path d="M116 190v24M210 190v24M116 178v-12M210 178v-12" stroke="#44552f" stroke-width="5" stroke-linecap="round"/>
+    <path d="M254 192h46l-6 28h-34z" fill="#27341f" stroke="#3d5129" stroke-width="2"/>
+    <path d="M277 192c-3-14-14-20-22-20 2 9 10 17 22 20zM277 192c2-16 12-26 22-27-1 12-9 23-22 27zM277 192c-1-12 1-24 6-30" fill="#5e8f2e" stroke="#7fb43c" stroke-width="1.5"/>
+    <g fill="#d9f99d"><path d="M150 128l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M226 112l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z"/></g>
+  </symbol>
+</svg>
+
 <div class="cinematic-container">
 <div class="main-header">
-  <a class="brand" href="#slide-1">
-    <span class="brand-mark" aria-hidden="true"><svg role="img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M0.00 28.66 L0.00 28.28 L0.01 27.89 L0.02 27.51 L0.04 27.12 L0.06 26.74 L0.09 26.36 L0.13 25.97 L0.17 25.59 L0.21 25.21 L0.26 24.83 L0.31 24.44 L0.37 24.06 L0.44 23.69 L0.50 23.31 L0.58 22.93 L0.66 22.55 L0.74 22.18 L0.83 21.80 L0.93 21.43 L1.03 21.06 L1.13 20.69 L1.24 20.32 L1.36 19.95 L1.48 19.59 L1.60 19.22 L1.73 18.86 L1.86 18.50 L2.00 18.14 L2.15 17.78 L2.29 17.43 L2.45 17.07 L2.60 16.72 L2.77 16.38 L2.93 16.03 L3.11 15.68 L3.28 15.34 L3.46 15.00 L3.65 14.67 L3.84 14.33 L4.03 14.00 L4.23 13.67 L4.44 13.34 L4.65 13.02 L4.86 12.70 L5.07 12.38 L5.29 12.07 L5.52 11.75 L5.75 11.44 L5.98 11.14 L6.22 10.83 L6.46 10.54 L6.71 10.24 L6.96 9.95 L7.21 9.66 L7.47 9.37 L7.73 9.09 L7.99 8.81 L8.26 8.53 L8.53 8.26 L8.81 7.99 L9.09 7.73 L9.37 7.47 L9.66 7.21 L9.95 6.96 L10.24 6.71 L10.54 6.46 L10.83 6.22 L11.14 5.98 L11.44 5.75 L11.75 5.52 L12.07 5.29 L12.38 5.07 L12.70 4.86 L13.02 4.65 L13.34 4.44 L13.67 4.23 L14.00 4.03 L14.33 3.84 L14.67 3.65 L15.00 3.46 L15.34 3.28 L15.68 3.11 L16.03 2.93 L16.38 2.77 L16.72 2.60 L17.07 2.45 L17.43 2.29 L17.78 2.15 L18.14 2.00 L18.50 1.86 L18.86 1.73 L19.22 1.60 L19.59 1.48 L19.95 1.36 L20.32 1.24 L20.69 1.13 L21.06 1.03 L21.43 0.93 L21.80 0.83 L22.18 0.74 L22.55 0.66 L22.93 0.58 L23.31 0.50 L23.69 0.44 L24.06 0.37 L24.44 0.31 L24.83 0.26 L25.21 0.21 L25.59 0.17 L25.97 0.13 L26.36 0.09 L26.74 0.06 L27.12 0.04 L27.51 0.02 L27.89 0.01 L28.28 0.00 L28.66 0.00 L71.34 0.00 L71.72 0.00 L72.11 0.01 L72.49 0.02 L72.88 0.04 L73.26 0.06 L73.64 0.09 L74.03 0.13 L74.41 0.17 L74.79 0.21 L75.17 0.26 L75.56 0.31 L75.94 0.37 L76.31 0.44 L76.69 0.50 L77.07 0.58 L77.45 0.66 L77.82 0.74 L78.20 0.83 L78.57 0.93 L78.94 1.03 L79.31 1.13 L79.68 1.24 L80.05 1.36 L80.41 1.48 L80.78 1.60 L81.14 1.73 L81.50 1.86 L81.86 2.00 L82.22 2.15 L82.57 2.29 L82.93 2.45 L83.28 2.60 L83.62 2.77 L83.97 2.93 L84.32 3.11 L84.66 3.28 L85.00 3.46 L85.33 3.65 L85.67 3.84 L86.00 4.03 L86.33 4.23 L86.66 4.44 L86.98 4.65 L87.30 4.86 L87.62 5.07 L87.93 5.29 L88.25 5.52 L88.56 5.75 L88.86 5.98 L89.17 6.22 L89.46 6.46 L89.76 6.71 L90.05 6.96 L90.34 7.21 L90.63 7.47 L90.91 7.73 L91.19 7.99 L91.47 8.26 L91.74 8.53 L92.01 8.81 L92.27 9.09 L92.53 9.37 L92.79 9.66 L93.04 9.95 L93.29 10.24 L93.54 10.54 L93.78 10.83 L94.02 11.14 L94.25 11.44 L94.48 11.75 L94.71 12.07 L94.93 12.38 L95.14 12.70 L95.35 13.02 L95.56 13.34 L95.77 13.67 L95.97 14.00 L96.16 14.33 L96.35 14.67 L96.54 15.00 L96.72 15.34 L96.89 15.68 L97.07 16.03 L97.23 16.38 L97.40 16.72 L97.55 17.07 L97.71 17.43 L97.85 17.78 L98.00 18.14 L98.14 18.50 L98.27 18.86 L98.40 19.22 L98.52 19.59 L98.64 19.95 L98.76 20.32 L98.87 20.69 L98.97 21.06 L99.07 21.43 L99.17 21.80 L99.26 22.18 L99.34 22.55 L99.42 22.93 L99.50 23.31 L99.56 23.69 L99.63 24.06 L99.69 24.44 L99.74 24.83 L99.79 25.21 L99.83 25.59 L99.87 25.97 L99.91 26.36 L99.94 26.74 L99.96 27.12 L99.98 27.51 L99.99 27.89 L100.00 28.28 L100.00 28.66 L100.00 71.34 L100.00 71.72 L99.99 72.11 L99.98 72.49 L99.96 72.88 L99.94 73.26 L99.91 73.64 L99.87 74.03 L99.83 74.41 L99.79 74.79 L99.74 75.17 L99.69 75.56 L99.63 75.94 L99.56 76.31 L99.50 76.69 L99.42 77.07 L99.34 77.45 L99.26 77.82 L99.17 78.20 L99.07 78.57 L98.97 78.94 L98.87 79.31 L98.76 79.68 L98.64 80.05 L98.52 80.41 L98.40 80.78 L98.27 81.14 L98.14 81.50 L98.00 81.86 L97.85 82.22 L97.71 82.57 L97.55 82.93 L97.40 83.28 L97.23 83.62 L97.07 83.97 L96.89 84.32 L96.72 84.66 L96.54 85.00 L96.35 85.33 L96.16 85.67 L95.97 86.00 L95.77 86.33 L95.56 86.66 L95.35 86.98 L95.14 87.30 L94.93 87.62 L94.71 87.93 L94.48 88.25 L94.25 88.56 L94.02 88.86 L93.78 89.17 L93.54 89.46 L93.29 89.76 L93.04 90.05 L92.79 90.34 L92.53 90.63 L92.27 90.91 L92.01 91.19 L91.74 91.47 L91.47 91.74 L91.19 92.01 L90.91 92.27 L90.63 92.53 L90.34 92.79 L90.05 93.04 L89.76 93.29 L89.46 93.54 L89.17 93.78 L88.86 94.02 L88.56 94.25 L88.25 94.48 L87.93 94.71 L87.62 94.93 L87.30 95.14 L86.98 95.35 L86.66 95.56 L86.33 95.77 L86.00 95.97 L85.67 96.16 L85.33 96.35 L85.00 96.54 L84.66 96.72 L84.32 96.89 L83.97 97.07 L83.62 97.23 L83.28 97.40 L82.93 97.55 L82.57 97.71 L82.22 97.85 L81.86 98.00 L81.50 98.14 L81.14 98.27 L80.78 98.40 L80.41 98.52 L80.05 98.64 L79.68 98.76 L79.31 98.87 L78.94 98.97 L78.57 99.07 L78.20 99.17 L77.82 99.26 L77.45 99.34 L77.07 99.42 L76.69 99.50 L76.31 99.56 L75.94 99.63 L75.56 99.69 L75.17 99.74 L74.79 99.79 L74.41 99.83 L74.03 99.87 L73.64 99.91 L73.26 99.94 L72.88 99.96 L72.49 99.98 L72.11 99.99 L71.72 100.00 L71.34 100.00 L28.66 100.00 L28.28 100.00 L27.89 99.99 L27.51 99.98 L27.12 99.96 L26.74 99.94 L26.36 99.91 L25.97 99.87 L25.59 99.83 L25.21 99.79 L24.83 99.74 L24.44 99.69 L24.06 99.63 L23.69 99.56 L23.31 99.50 L22.93 99.42 L22.55 99.34 L22.18 99.26 L21.80 99.17 L21.43 99.07 L21.06 98.97 L20.69 98.87 L20.32 98.76 L19.95 98.64 L19.59 98.52 L19.22 98.40 L18.86 98.27 L18.50 98.14 L18.14 98.00 L17.78 97.85 L17.43 97.71 L17.07 97.55 L16.72 97.40 L16.38 97.23 L16.03 97.07 L15.68 96.89 L15.34 96.72 L15.00 96.54 L14.67 96.35 L14.33 96.16 L14.00 95.97 L13.67 95.77 L13.34 95.56 L13.02 95.35 L12.70 95.14 L12.38 94.93 L12.07 94.71 L11.75 94.48 L11.44 94.25 L11.14 94.02 L10.83 93.78 L10.54 93.54 L10.24 93.29 L9.95 93.04 L9.66 92.79 L9.37 92.53 L9.09 92.27 L8.81 92.01 L8.53 91.74 L8.26 91.47 L7.99 91.19 L7.73 90.91 L7.47 90.63 L7.21 90.34 L6.96 90.05 L6.71 89.76 L6.46 89.46 L6.22 89.17 L5.98 88.86 L5.75 88.56 L5.52 88.25 L5.29 87.93 L5.07 87.62 L4.86 87.30 L4.65 86.98 L4.44 86.66 L4.23 86.33 L4.03 86.00 L3.84 85.67 L3.65 85.33 L3.46 85.00 L3.28 84.66 L3.11 84.32 L2.93 83.97 L2.77 83.62 L2.60 83.28 L2.45 82.93 L2.29 82.57 L2.15 82.22 L2.00 81.86 L1.86 81.50 L1.73 81.14 L1.60 80.78 L1.48 80.41 L1.36 80.05 L1.24 79.68 L1.13 79.31 L1.03 78.94 L0.93 78.57 L0.83 78.20 L0.74 77.82 L0.66 77.45 L0.58 77.07 L0.50 76.69 L0.44 76.31 L0.37 75.94 L0.31 75.56 L0.26 75.17 L0.21 74.79 L0.17 74.41 L0.13 74.03 L0.09 73.64 L0.06 73.26 L0.04 72.88 L0.02 72.49 L0.01 72.11 L0.00 71.72 L0.00 71.34 Z M22.93 51.07 L22.76 51.26 L22.60 51.47 L22.45 51.68 L22.32 51.90 L22.19 52.13 L22.08 52.36 L21.99 52.60 L21.90 52.85 L21.83 53.10 L21.77 53.35 L21.73 53.61 L21.70 53.86 L21.69 54.12 L21.69 54.38 L21.71 54.64 L21.74 54.90 L21.78 55.15 L21.84 55.41 L21.91 55.65 L22.00 55.90 L22.10 56.14 L22.21 56.37 L22.34 56.60 L22.48 56.82 L22.63 57.03 L22.79 57.23 L22.97 57.42 L23.15 57.61 L23.34 57.78 L23.55 57.94 L23.76 58.09 L23.98 58.23 L24.20 58.35 L24.44 58.46 L24.68 58.56 L24.92 58.65 L25.17 58.72 L25.42 58.78 L25.68 58.82 L25.94 58.85 L26.20 58.86 L45.19 59.40 L45.45 59.43 L45.70 59.51 L45.92 59.63 L46.13 59.79 L46.30 59.98 L46.43 60.20 L46.53 60.45 L46.57 60.70 L46.57 60.96 L46.53 61.21 L42.01 77.35 L41.95 77.59 L41.90 77.84 L41.86 78.10 L41.85 78.35 L41.84 78.61 L41.85 78.86 L41.88 79.12 L41.91 79.37 L41.97 79.62 L42.03 79.86 L42.12 80.11 L42.21 80.34 L42.32 80.57 L42.44 80.80 L42.57 81.02 L42.72 81.23 L42.87 81.43 L43.04 81.62 L43.22 81.80 L43.41 81.97 L43.61 82.13 L43.82 82.28 L44.03 82.42 L44.25 82.54 L44.48 82.66 L44.72 82.75 L44.96 82.84 L45.20 82.91 L45.45 82.97 L45.70 83.01 L45.96 83.04 L46.21 83.05 L46.47 83.05 L46.72 83.04 L46.97 83.01 L47.23 82.97 L47.47 82.91 L47.72 82.84 L47.96 82.75 L48.20 82.65 L48.42 82.54 L48.65 82.42 L48.86 82.28 L49.07 82.13 L49.27 81.97 L49.46 81.80 L49.63 81.62 L80.30 48.57 L80.47 48.37 L80.63 48.17 L80.77 47.96 L80.91 47.74 L81.03 47.51 L81.14 47.27 L81.24 47.03 L81.32 46.79 L81.39 46.54 L81.45 46.29 L81.49 46.03 L81.52 45.77 L81.53 45.51 L81.53 45.26 L81.51 45.00 L81.48 44.74 L81.44 44.49 L81.38 44.23 L81.31 43.98 L81.22 43.74 L81.12 43.50 L81.01 43.27 L80.88 43.04 L80.74 42.82 L80.59 42.61 L80.43 42.41 L80.26 42.22 L80.07 42.04 L79.88 41.86 L79.68 41.70 L79.46 41.55 L79.24 41.42 L79.02 41.29 L78.78 41.18 L78.54 41.08 L78.30 41.00 L78.05 40.92 L77.80 40.87 L77.54 40.82 L77.29 40.79 L77.03 40.78 L58.05 40.24 L57.79 40.21 L57.54 40.13 L57.31 40.01 L57.11 39.85 L56.93 39.65 L56.80 39.43 L56.71 39.18 L56.67 38.92 L56.67 38.66 L56.72 38.41 L61.68 21.88 L61.75 21.63 L61.80 21.38 L61.84 21.12 L61.86 20.86 L61.87 20.60 L61.86 20.34 L61.84 20.08 L61.80 19.83 L61.75 19.57 L61.68 19.32 L61.60 19.07 L61.50 18.83 L61.39 18.60 L61.27 18.37 L61.13 18.15 L60.98 17.93 L60.82 17.73 L60.65 17.53 L60.46 17.35 L60.27 17.18 L60.06 17.02 L59.85 16.87 L59.63 16.73 L59.40 16.61 L59.16 16.50 L58.92 16.41 L58.67 16.33 L58.42 16.26 L58.17 16.21 L57.91 16.17 L57.65 16.15 L57.39 16.14 L57.13 16.15 L56.87 16.18 L56.61 16.21 L56.36 16.27 L56.11 16.34 L55.86 16.42 L55.62 16.52 L55.39 16.63 L55.16 16.75 L54.94 16.89 L54.72 17.04 L54.52 17.20 L54.33 17.38 L54.15 17.56 Z"/></svg></span>
+  <a class="brand" href="#hero" aria-label="Signalo, retour en haut">
+    <span class="brand-mark" aria-hidden="true"><svg class="mark"><use href="#i-mark"/></svg></span>
     <span class="brand-text">SIGNALO</span>
   </a>
-  <nav class="header-nav" aria-label="Chapitres">
-    <a href="#slide-1" class="nav-link is-active">Accueil</a>
-    <a href="#slide-2" class="nav-link">Fonctionnalités</a>
-    <a href="#slide-3" class="nav-link">Comment ça marche</a>
-    <a href="#slide-4" class="nav-link">Écosystème</a>
-    <a href="#slide-5" class="nav-link">Pour qui</a>
-    <a href="#slide-6" class="nav-link">Impact</a>
+  <nav class="header-nav" aria-label="Sections principales">
+    <a href="#probleme" class="nav-link" data-target="probleme">Problème</a>
+    <a href="#citoyen" class="nav-link" data-target="citoyen">Citoyen</a>
+    <a href="#ia" class="nav-link" data-target="ia">IA</a>
+    <a href="#mairie" class="nav-link" data-target="mairie">Mairie</a>
+    <a href="#workflow" class="nav-link" data-target="workflow">Workflow</a>
+    <a href="#ecosysteme" class="nav-link" data-target="ecosysteme">Écosystème</a>
   </nav>
   <div class="header-actions">
-    <span class="header-counter" aria-hidden="true"><span id="brand-chapter">01</span><span class="counter-sep"></span>07</span>
+    <span class="header-counter" aria-hidden="true"><span id="brand-chapter">01</span><span class="counter-sep"></span>12</span>
     <a href="#contact" class="contact-btn">Démo mairie <span class="btn-arrow">&#8599;</span></a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="menu-btn-lines" aria-hidden="true"></span><span class="menu-btn-label">Menu</span></button>
   </div>
 </div>
 
-<!-- 01 · Accueil -->
-<div class="slide" id="slide-1">
-  <p class="slide-eyebrow"><span class="eyebrow-dot"></span>Votre ville, votre voix</p>
-  <h2 class="slide-title">Signalez. Améliorez. <br>Votre ville.</h2>
-  <div class="desc-row">
-    <p class="slide-desc col-1">Signalo vous permet de signaler un problème du quotidien — dépôt sauvage, éclairage en panne, voirie dégradée — en quelques secondes, où que vous soyez. Suivez ensuite en temps réel la prise en charge par votre mairie.</p>
+<!-- 01 · Hero (3D stage) -->
+<div class="slide stage-slide hero" id="slide-1">
+  <div class="hero-head">
+    <p class="hero-tags"><span class="badge-ai"><span class="badge-pulse"></span>100 % IA</span><span class="hero-brand">Signalo</span></p>
+    <h1 class="slide-title hero-title">Signaler. <br>Améliorer. <br>Votre ville.</h1>
   </div>
-  <div class="hero-actions">
-    <a class="store-btn" href="#" data-store="app-store"><small>Télécharger sur</small>App Store</a>
-    <a class="store-btn" href="#" data-store="google-play"><small>Disponible sur</small>Google Play</a>
-    <a class="demo-btn" href="#contact">Demander une démo gratuite pour votre mairie <span class="arrow">&#8599;</span></a>
-  </div>
-</div>
-
-<!-- 02 · Fonctionnalités -->
-<div class="slide slide-dense slide-right" id="slide-2">
-  <p class="slide-eyebrow"><span class="eyebrow-dot"></span>Fonctionnalités</p>
-  <h2 class="slide-title">Un signalement pour <br>chaque situation</h2>
-  <p class="slide-desc">Six catégories couvrent l'essentiel des problèmes rencontrés au quotidien dans l'espace public.</p>
-  <ul class="cards cards-3">
-    <li class="card" style="--i:0"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 6h12"/><path d="M8 6V4h4v2"/><path d="m5.5 6 .8 10.2c.1.9.8 1.6 1.7 1.6h4c.9 0 1.6-.7 1.7-1.6L14.5 6"/><path d="M8.5 9v6M11.5 9v6" opacity=".55"/></svg></span><h3>Dépôt sauvage</h3><p>Encombrants, gravats et déchets abandonnés illégalement sur l'espace public.</p></li>
-    <li class="card" style="--i:1"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M14 3 9.4 9.6"/><path d="m6.4 9.3 4.8 3.4-1.5 4.4c-2.6-.4-4.8-2-6-4.4z"/><path d="m5.2 14.3 2.1-1.2M7.2 16.3l1.5-1.8" opacity=".55"/></svg></span><h3>Propreté</h3><p>Poubelles débordantes, déchets épars et salissures sur la voie publique.</p></li>
-    <li class="card" style="--i:2"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 3a5 5 0 0 0-3 9c.6.5 1 1.1 1 1.8V15h4v-1.2c0-.7.4-1.3 1-1.8a5 5 0 0 0-3-9z"/><path d="M8 17.3h4"/></svg></span><h3>Éclairage</h3><p>Lampadaires en panne, zones mal éclairées ou plongées dans le noir.</p></li>
-    <li class="card" style="--i:3"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 17.5v-5.3"/><path d="M10 2.8c-3 0-5 2.3-5 5 0 2.4 2.2 4.3 5 4.3s5-1.9 5-4.3c0-2.7-2-5-5-5z"/><path d="m10 12.2-2.2-2M10 10.6l1.8-1.8" opacity=".55"/></svg></span><h3>Espaces verts</h3><p>Végétation à entretenir, arbres dangereux, parcs et jardins abîmés.</p></li>
-    <li class="card" style="--i:4"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 3.3 2.7 16.4h14.6L10 3.3z"/><path d="M10 8.4v3.8"/><path d="M10 14.3v.1"/></svg></span><h3>Voirie &amp; sécurité</h3><p>Nids-de-poule, trottoirs dégradés, signalisation défectueuse, dangers de la chaussée.</p></li>
-    <li class="card" style="--i:5"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M6.8 10h.01M10 10h.01M13.2 10h.01" stroke-width="2.2"/></svg></span><h3>Autres signalements</h3><p>Tout problème du quotidien qui ne rentre pas dans les catégories ci-dessus.</p></li>
-  </ul>
-</div>
-
-<!-- 03 · Comment ça marche -->
-<div class="slide slide-dense slide-left" id="slide-3">
-  <p class="slide-eyebrow"><span class="eyebrow-dot"></span>Comment ça marche</p>
-  <h2 class="slide-title">Du signalement <br>à la résolution</h2>
-  <div class="flow">
-    <p class="flow-label">Pour les citoyens</p>
-    <ol class="steps">
-      <li class="step" style="--i:0"><span class="step-num">1</span><h3>Signalez</h3><p>Photo, localisation et catégorie en moins d'une minute.</p></li>
-      <li class="step" style="--i:1"><span class="step-num">2</span><h3>Prise en compte</h3><p>Votre mairie reçoit et qualifie le signalement.</p></li>
-      <li class="step" style="--i:2"><span class="step-num">3</span><h3>Intervention</h3><p>Les équipes municipales interviennent sur le terrain.</p></li>
-      <li class="step" style="--i:3"><span class="step-num">4</span><h3>Résolu</h3><p>Vous êtes notifié dès que le problème est traité.</p></li>
-    </ol>
-  </div>
-  <div class="flow flow-mairie">
-    <p class="flow-label">Pour les mairies</p>
-    <ol class="steps">
-      <li class="step" style="--i:4"><span class="step-num">1</span><h3>Recevez</h3><p>Chaque signalement arrive centralisé sur votre tableau de bord.</p></li>
-      <li class="step" style="--i:5"><span class="step-num">2</span><h3>Analysez &amp; assignez</h3><p>L'IA priorise et oriente vers la bonne équipe.</p></li>
-      <li class="step" style="--i:6"><span class="step-num">3</span><h3>Intervenez</h3><p>Les équipes agissent sur le terrain et mettent à jour le statut.</p></li>
-      <li class="step" style="--i:7"><span class="step-num">4</span><h3>Informez</h3><p>Le citoyen est notifié : la confiance et la transparence grandissent.</p></li>
+  <div class="hero-foot">
+    <p class="slide-desc hero-lead">La plateforme intelligente qui transforme chaque signalement citoyen en action concrète pour la ville.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#signaler">Signaler un problème <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-ghost" href="#probleme">Découvrir Signalo</a>
+    </div>
+    <ol class="hero-chain" aria-label="Le parcours d'un signalement">
+      <li class="c-city">Ville</li><li class="c-citizen">Citoyen</li><li class="c-signalo">Signalo</li><li class="c-ai">IA</li><li class="c-mairie">Mairie</li>
     </ol>
   </div>
 </div>
+<div class="hero-city" aria-hidden="true">
+  <svg viewBox="0 0 1440 170" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="g-city" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050805" stop-opacity=".55"/><stop offset="1" stop-color="#050805" stop-opacity=".96"/></linearGradient>
+    </defs>
+    <path class="city-back" d="M0 170V112h40V88h34v24h26V70h46v42h30V96h38v-30h28v46h40V84h52v28h24V58h44v54h34V92h30v20h46V76h38v36h28V64h50v48h36V98h28V72h40v40h34V86h46v26h30V60h48v52h28V94h36v18h40V80h44v32h30V68h46v44h34V90h32v22h40V74h42v38h28V100h24v70z"/>
+    <path class="city-front" d="M0 170v-36h56v-22h40v22h30v-40h52v58h34v-28h44v28h38v-50h46v50h30v-24h54v24h36v-44h40v44h48v-30h34v30h42v-56h50v56h32v-26h46v26h36v-38h44v38h40v-20h38v20h34v-48h48v48h36v-30h40v30h42v-42h44v42h30v-22h46v22h40V170z"/>
+    <g class="city-windows">
+      <path d="M70 128h6M84 128h6M70 140h6M150 108h6M164 120h6M150 132h6M258 104h6M272 116h6M258 128h6M428 106h6M442 118h6M600 98h6M614 110h6M600 122h6M770 112h6M784 124h6M930 100h6M944 112h6M930 124h6M1100 108h6M1114 120h6M1262 104h6M1276 116h6M1262 128h6M1380 120h6"/>
+    </g>
+    <g class="city-signals">
+      <path class="sig" d="M176 90 C 260 20, 520 10, 760 30"/>
+      <path class="sig" d="M488 82 C 580 30, 700 20, 820 34" style="--d:.8s"/>
+      <path class="sig" d="M712 96 C 760 60, 800 50, 860 44" style="--d:1.6s"/>
+      <path class="sig sig-red" d="M1060 40 C 1160 40, 1250 60, 1306 94" style="--d:2.2s"/>
+    </g>
+    <g class="city-pins">
+      <circle class="pin-ring" cx="176" cy="92" r="9"/><circle class="pin" cx="176" cy="92" r="3.5"/>
+      <circle class="pin-ring" cx="488" cy="84" r="9" style="--d:.8s"/><circle class="pin" cx="488" cy="84" r="3.5"/>
+      <circle class="pin-ring" cx="712" cy="98" r="9" style="--d:1.6s"/><circle class="pin" cx="712" cy="98" r="3.5"/>
+    </g>
+    <g class="city-mairie" transform="translate(1268 92)">
+      <path d="M0 78V30h76v48z"/><path d="M-6 30 38 8l44 22z"/><path d="M12 36v34M26 36v34M50 36v34M64 36v34"/><path d="M38 8V-8l12 4-12 4"/>
+      <circle class="mairie-beacon" cx="38" cy="-10" r="14"/>
+    </g>
+  </svg>
+</div>
 
-<!-- 04 · Écosystème -->
-<div class="slide slide-dense slide-right" id="slide-4">
-  <p class="slide-eyebrow"><span class="eyebrow-dot"></span>Écosystème</p>
-  <h2 class="slide-title">Une seule app, <br>toutes les solutions</h2>
-  <p class="slide-desc">Signalo évolue en plusieurs modules, tous pilotés par la même IA, pour couvrir chaque aspect de la vie urbaine.</p>
-  <ul class="cards cards-2 modules">
-    <li class="card module" style="--i:0"><span class="module-tag is-live">Signalo</span><h3>Signalez, améliorez votre ville</h3><p>L'application citoyenne 100 % gérée par l'IA : photo intelligente, analyse d'urgence, géolocalisation précise, suivi en temps réel jusqu'à la résolution.</p></li>
-    <li class="card module" style="--i:1"><span class="module-tag">V2</span><h3>Dépôt sauvage</h3><p>Reconnaissance automatique des déchets par IA, catégorisation intelligente, suivi et traçabilité jusqu'à la collecte.</p></li>
-    <li class="card module" style="--i:2"><span class="module-tag">V3</span><h3>Transport &amp; mobilité</h3><p>Perturbations signalées (bus, métro, tram), alertes personnalisées, suggestions d'amélioration et trajets optimisés.</p></li>
-    <li class="card module" style="--i:3"><span class="module-tag">V4</span><h3>Objets trouvés</h3><p>IA de matching photo + description, mise en relation entre citoyens, points de rencontre sécurisés en mairie.</p></li>
+<!-- 02 · Le problème (3D stage: the object breaks apart) -->
+<div class="slide stage-slide slide-right" id="slide-2">
+  <p class="slide-eyebrow"><span class="eyebrow-num">02</span>Le problème</p>
+  <h2 class="slide-title problem-title">Une ville. <br>Des milliers <br>de problèmes. <br>Une seule plateforme.</h2>
+  <ul class="problem-cloud">
+    <li style="--i:0"><svg class="ico"><use href="#i-trash"/></svg>Dépôt sauvage</li>
+    <li style="--i:1"><svg class="ico"><use href="#i-road"/></svg>Voirie</li>
+    <li style="--i:2"><svg class="ico"><use href="#i-bulb"/></svg>Éclairage</li>
+    <li style="--i:3"><svg class="ico"><use href="#i-spark"/></svg>Propreté</li>
+    <li style="--i:4"><svg class="ico"><use href="#i-bench"/></svg>Mobilier urbain</li>
+    <li style="--i:5"><svg class="ico"><use href="#i-sign"/></svg>Signalisation</li>
   </ul>
 </div>
 
-<!-- 05 · Pour qui -->
-<div class="slide slide-dense slide-left" id="slide-5">
-  <p class="slide-eyebrow"><span class="eyebrow-dot"></span>Pour qui</p>
-  <h2 class="slide-title">Une app, <br>deux usages</h2>
-  <div class="audiences">
-    <div class="audience" style="--i:0">
-      <p class="flow-label">Pour les citoyens</p>
-      <ul class="checks">
-        <li>Signalez un problème en quelques secondes, où que vous soyez</li>
-        <li>Suivez l'avancement de vos signalements en temps réel</li>
-        <li>Consultez les alertes et signalements de votre quartier</li>
-      </ul>
-    </div>
-    <div class="audience audience-mairie" style="--i:1">
-      <p class="flow-label">Pour les mairies</p>
-      <ul class="checks">
-        <li>Centralisez tous les signalements de votre commune</li>
-        <li>Priorisez automatiquement grâce à l'IA</li>
-        <li>Communiquez directement avec vos administrés</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<!-- 06 · Impact -->
-<div class="slide slide-dense slide-right" id="slide-6">
-  <p class="slide-eyebrow"><span class="eyebrow-dot"></span>Impact</p>
-  <h2 class="slide-title">Une ville qui <br>vous répond</h2>
-  <ul class="cards cards-2 values">
-    <li class="card" style="--i:0"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M11 2.5 4.5 11h5l-1 6.5L15.5 9h-5l.5-6.5z"/></svg></span><h3>Réactivité</h3><p>Des signalements transmis instantanément aux bons services.</p></li>
-    <li class="card" style="--i:1"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M2.5 10s2.8-5 7.5-5 7.5 5 7.5 5-2.8 5-7.5 5-7.5-5-7.5-5z"/><circle cx="10" cy="10" r="2.2"/></svg></span><h3>Transparence</h3><p>Un suivi visible à chaque étape, du signalement à sa résolution.</p></li>
-    <li class="card is-mairie" style="--i:2"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 17.5s-5-4.6-5-8.7a5 5 0 0 1 10 0c0 4.1-5 8.7-5 8.7z"/><circle cx="10" cy="8.6" r="1.8"/></svg></span><h3>Proximité</h3><p>Un lien direct entre habitants et services municipaux.</p></li>
-    <li class="card" style="--i:3"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M16 4c0 7-4 11-9 11H4c0-7 4-11 9-11h3z"/><path d="M4 16c3-4.5 6-6.8 9.5-8" opacity=".55"/></svg></span><h3>Qualité de vie</h3><p>Une ville plus propre, plus sûre et mieux entretenue au quotidien.</p></li>
-  </ul>
+<!-- 03 · La solution (3D stage: the object recomposes) -->
+<div class="slide stage-slide slide-left" id="slide-3">
+  <p class="slide-eyebrow"><span class="eyebrow-num">03</span>La solution Signalo</p>
+  <h2 class="slide-title solution-title">Un problème <br>dans la ville ? <br>Signalez-le.</h2>
+  <p class="solution-kicker">Notre IA s'occupe du reste.</p>
+  <ol class="solution-steps">
+    <li style="--i:0">Photo.</li><li style="--i:1">Analyse IA.</li><li style="--i:2">Priorisation.</li><li style="--i:3">Transmission.</li><li style="--i:4">Intervention.</li><li style="--i:5">Résolution.</li>
+  </ol>
 </div>
 </div>
 
-<div class="scroll-stage" aria-hidden="true"></div>
-<section class="contact" id="contact" aria-labelledby="contact-title">
-  <div class="contact-inner">
-    <div class="contact-intro">
-      <p class="contact-eyebrow"><span class="eyebrow-dot"></span>Contact / 07</p>
-      <h2 class="contact-title" id="contact-title"><span class="line"><span class="line-inner">Parlons de</span></span><span class="line muted"><span class="line-inner">votre ville.</span></span></h2>
-      <p class="contact-lead">Une demande de démo pour votre mairie ? Renseignez le nom de votre commune : le code postal, la ville et la population se complètent automatiquement.</p>
-      <div class="offer" id="demoBanner">
-        <p class="offer-title" id="demoBannerTitle">Offre découverte mairie</p>
-        <p class="offer-sub" id="demoBannerSub">Profitez d'un accompagnement de lancement offert — offre valable 14 jours.</p>
-        <div class="countdown" id="demoCountdown">
-          <div><span id="cdDays">14</span><small>jours</small></div>
-          <div><span id="cdHours">00</span><small>heures</small></div>
-          <div><span id="cdMinutes">00</span><small>min</small></div>
-          <div><span id="cdSeconds">00</span><small>sec</small></div>
-        </div>
-      </div>
-      <a class="contact-mail" href="mailto:contact@signalo.site">contact@signalo.site <span class="arrow">&#8599;</span></a>
-    </div>
-    <form class="contact-card" id="demoMairieForm" data-email="contact@signalo.site" novalidate>
-      <div class="card-head"><span>Demande de démo</span><span class="arrow">&#8599;</span></div>
-      <div class="field-grid">
-        <div class="field field-wide">
-          <label class="field-label" for="demoCommune">Nom de la mairie / commune <em>*</em></label>
-          <div class="combo">
-            <input type="text" name="commune" id="demoCommune" placeholder="Commencez à taper, ex. Versailles" autocomplete="off" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="communeSuggestions">
-            <ul class="commune-suggestions" id="communeSuggestions" role="listbox" hidden></ul>
+<div class="scroll-stage" aria-hidden="true">
+  <span class="stage-anchor" id="hero" style="--at:0"></span>
+  <span class="stage-anchor" id="probleme" style="--at:0.34"></span>
+  <span class="stage-anchor" id="solution" style="--at:0.80"></span>
+</div>
+
+<main class="story" id="story">
+
+<!-- 04 · Signalo Citoyen -->
+<section class="sec sec-citizen" id="citoyen" aria-labelledby="citoyen-title">
+  <div class="sec-inner">
+    <header class="sec-head reveal">
+      <p class="sec-eyebrow"><span class="sec-num">04</span>Univers citoyen</p>
+      <h2 class="sec-title" id="citoyen-title">Signalo <span class="t-green">Citoyen</span></h2>
+      <p class="sec-sub">Le signalement devient une action.</p>
+    </header>
+    <div class="citizen-grid">
+      <div class="phone-wrap reveal" aria-hidden="true">
+        <div class="phone" data-step="1">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ph-top"><span class="ph-title">Nouveau signalement</span><span class="ph-dot"></span></div>
+            <div class="ph-photo">
+              <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice"><use href="#scene-depot"/></svg>
+              <span class="ph-scan"></span>
+              <span class="ph-box"><em>Dépôt sauvage</em></span>
+            </div>
+            <div class="ph-rows">
+              <p class="ph-row"><svg class="ico"><use href="#i-pin"/></svg><span>Position ajoutée automatiquement</span></p>
+              <p class="ph-row ph-ai"><svg class="ico"><use href="#i-ai"/></svg><span>Catégorie : dépôt sauvage · urgence élevée</span></p>
+            </div>
+            <div class="ph-status">
+              <span class="st st-1">Envoyé</span><span class="st st-2">Analysé</span><span class="st st-3">Pris en charge</span><span class="st st-4">Résolu</span>
+            </div>
+            <div class="ph-notif"><svg class="ico"><use href="#i-check"/></svg><span><strong>Problème résolu</strong>Merci pour votre signalement.</span></div>
+            <span class="ph-btn">Envoyer le signalement</span>
           </div>
-          <span class="field-hint">Auto-remplissage disponible pour les communes françaises.</span>
         </div>
-        <label class="field"><span class="field-label">Nom et prénom du contact <em>*</em></span><input type="text" name="contact" autocomplete="name" required></label>
-        <label class="field"><span class="field-label">Fonction</span>
-          <select name="fonction">
-            <option value="">Sélectionner…</option>
-            <option>Élu(e)</option>
-            <option>DGS</option>
-            <option>Service technique</option>
-            <option>Autre</option>
-          </select>
-        </label>
-        <label class="field field-wide"><span class="field-label">Adresse de la mairie</span><input type="text" name="adresse" placeholder="Ex. 1 place de la Mairie" autocomplete="street-address"></label>
-        <label class="field"><span class="field-label">Code postal</span><input type="text" name="code_postal" placeholder="Ex. 78000" inputmode="numeric" autocomplete="postal-code"></label>
-        <label class="field"><span class="field-label">Ville</span><input type="text" name="ville" autocomplete="address-level2"></label>
-        <label class="field"><span class="field-label">E-mail professionnel <em>*</em></span><input type="email" name="email" placeholder="prenom.nom@mairie.fr" autocomplete="email" required></label>
-        <label class="field"><span class="field-label">Téléphone</span><input type="tel" name="telephone" autocomplete="tel"></label>
-        <label class="field"><span class="field-label">Population</span><input type="number" name="population_exacte" min="0" placeholder="Ex. 37 000"></label>
-        <label class="field"><span class="field-label">Besoin principal</span>
-          <select name="besoin">
-            <option value="">Sélectionner…</option>
-            <option>Centraliser les signalements</option>
-            <option>Prioriser avec l'IA</option>
-            <option>Améliorer la communication citoyenne</option>
-            <option>Autre</option>
-          </select>
-        </label>
-        <label class="field field-wide"><span class="field-label">Message <small>optionnel</small></span><textarea name="message" rows="3" placeholder="Votre contexte, vos questions…"></textarea></label>
       </div>
-      <p class="form-msg" id="demoMairieMsg" role="alert"></p>
-      <div class="card-foot">
-        <p class="card-note">Gratuit et sans engagement.<br>Réponse sous 24 h.</p>
-        <button type="submit" class="pill-btn"><span class="btn-label">Envoyer ma demande de démo</span> <span class="arrow">&#8599;</span></button>
-      </div>
-    </form>
+      <ol class="journey">
+        <li class="journey-step reveal" data-step="1"><span class="j-num">01</span><div><h3>Je constate</h3><p>Un dépôt sauvage, un lampadaire éteint, un trou dans la chaussée.</p></div></li>
+        <li class="journey-step reveal" data-step="2"><span class="j-num">02</span><div><h3>Je signale</h3><p>Une photo suffit. La position est ajoutée automatiquement.</p></div></li>
+        <li class="journey-step reveal" data-step="3"><span class="j-num">03</span><div><h3>L'IA analyse</h3><p>Catégorie, urgence et service compétent, en un instant.</p></div></li>
+        <li class="journey-step reveal" data-step="4"><span class="j-num">04</span><div><h3>La mairie agit</h3><p>Le bon service reçoit le signalement et intervient.</p></div></li>
+        <li class="journey-step reveal" data-step="5"><span class="j-num">05</span><div><h3>Je suis informé</h3><p>Une notification à chaque étape, jusqu'à la résolution.</p></div></li>
+      </ol>
+    </div>
+    <ul class="pill-row reveal">
+      <li><svg class="ico"><use href="#i-bolt"/></svg>Signalez en quelques secondes</li>
+      <li><svg class="ico"><use href="#i-track"/></svg>Suivez en temps réel</li>
+      <li><svg class="ico"><use href="#i-bell"/></svg>Alertes de votre quartier</li>
+    </ul>
   </div>
-  <footer class="contact-footer">
-    <span>&copy; 2026 &mdash; SIGNALO</span>
+</section>
+
+<!-- 05 · L'IA -->
+<section class="sec sec-ai" id="ia" aria-labelledby="ia-title">
+  <div class="sec-inner">
+    <header class="sec-head sec-head-center reveal">
+      <p class="sec-eyebrow"><span class="sec-num">05</span>L'IA</p>
+      <h2 class="sec-title sec-title-xl" id="ia-title"><span class="t-glow">100 % IA</span></h2>
+      <p class="sec-sub">L'intelligence qui transforme un signal en action.</p>
+    </header>
+    <div class="ai-grid" data-play>
+      <figure class="ai-frame reveal" aria-hidden="true">
+        <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice"><use href="#scene-depot"/></svg>
+        <span class="ai-scanline"></span>
+        <span class="ai-bbox ai-bbox-1"><em>Encombrant</em></span>
+        <span class="ai-bbox ai-bbox-2"><em>Sacs</em></span>
+        <span class="ai-chip ai-chip-cat">Dépôt sauvage</span>
+        <span class="ai-chip ai-chip-prio">Urgence élevée</span>
+        <span class="ai-chip ai-chip-pin"><svg class="ico"><use href="#i-pin"/></svg>Position vérifiée</span>
+        <figcaption>Exemple de traitement</figcaption>
+      </figure>
+      <ol class="ai-pipeline">
+        <li style="--i:0"><span class="ai-ico"><svg class="ico"><use href="#i-eye"/></svg></span><div><h3>Vision IA</h3><p>Analyse de l'image</p></div><span class="ai-out">Objets détectés</span></li>
+        <li style="--i:1"><span class="ai-ico"><svg class="ico"><use href="#i-tag"/></svg></span><div><h3>Classification</h3><p>Identification du problème</p></div><span class="ai-out">Dépôt sauvage</span></li>
+        <li style="--i:2"><span class="ai-ico"><svg class="ico"><use href="#i-gauge"/></svg></span><div><h3>Priorisation</h3><p>Évaluation de l'urgence</p></div><span class="ai-out ai-out-red">Élevée</span></li>
+        <li style="--i:3"><span class="ai-ico"><svg class="ico"><use href="#i-pin"/></svg></span><div><h3>Localisation</h3><p>Identification du lieu</p></div><span class="ai-out">Géolocalisé</span></li>
+        <li style="--i:4"><span class="ai-ico"><svg class="ico"><use href="#i-send"/></svg></span><div><h3>Affectation</h3><p>Transmission au bon service</p></div><span class="ai-out ai-out-red">Service propreté</span></li>
+        <li style="--i:5"><span class="ai-ico"><svg class="ico"><use href="#i-track"/></svg></span><div><h3>Suivi</h3><p>Suivi jusqu'à la résolution</p></div><span class="ai-out">Citoyen notifié</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · Signalo Mairie -->
+<section class="sec sec-mairie" id="mairie" aria-labelledby="mairie-title">
+  <div class="sec-inner">
+    <header class="sec-head reveal">
+      <p class="sec-eyebrow"><span class="sec-num">06</span>Univers mairie</p>
+      <h2 class="sec-title" id="mairie-title">Signalo <span class="t-red">Mairie</span></h2>
+      <p class="sec-sub">Tout ce que la ville doit savoir. <br>Au bon moment.</p>
+    </header>
+    <div class="dash reveal" aria-hidden="true">
+      <aside class="dash-nav">
+        <span class="dash-logo"><svg class="mark"><use href="#i-mark"/></svg></span>
+        <span class="dn is-on"><svg class="ico"><use href="#i-map"/></svg>Carte</span>
+        <span class="dn"><svg class="ico"><use href="#i-list"/></svg>Signalements</span>
+        <span class="dn"><svg class="ico"><use href="#i-gauge"/></svg>Priorités</span>
+        <span class="dn"><svg class="ico"><use href="#i-team"/></svg>Services</span>
+        <span class="dn"><svg class="ico"><use href="#i-helmet"/></svg>Interventions</span>
+        <span class="dn"><svg class="ico"><use href="#i-track"/></svg>Suivi</span>
+        <span class="dn"><svg class="ico"><use href="#i-check"/></svg>Résolution</span>
+      </aside>
+      <div class="dash-map">
+        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="240" fill="#0a0e0b"/>
+          <path d="M-10 150 C 60 130, 120 170, 190 150 S 300 110, 370 130" stroke="#0f2430" stroke-width="16" fill="none"/>
+          <g stroke="#1b231d" stroke-width="7" fill="none"><path d="M0 60h360M0 200h360M70 0v240M160 0v240M250 0v240M320 0v240"/><path d="M0 10 L120 120 L360 240" stroke-width="5"/></g>
+          <g fill="#111813"><rect x="8" y="8" width="54" height="44" rx="5"/><rect x="80" y="8" width="72" height="44" rx="5"/><rect x="170" y="8" width="72" height="44" rx="5"/><rect x="260" y="8" width="52" height="44" rx="5"/><rect x="80" y="68" width="72" height="60" rx="5"/><rect x="170" y="68" width="72" height="56" rx="5"/><rect x="260" y="68" width="52" height="46" rx="5"/><rect x="8" y="208" width="54" height="30" rx="5"/><rect x="170" y="208" width="72" height="30" rx="5"/><rect x="260" y="208" width="52" height="30" rx="5"/></g>
+        </svg>
+        <span class="mpin mpin-red" style="--x:28%;--y:30%;--i:0"></span>
+        <span class="mpin mpin-red" style="--x:64%;--y:62%;--i:1"></span>
+        <span class="mpin mpin-amber" style="--x:46%;--y:22%;--i:2"></span>
+        <span class="mpin mpin-amber" style="--x:80%;--y:40%;--i:3"></span>
+        <span class="mpin mpin-green" style="--x:16%;--y:72%;--i:4"></span>
+        <span class="mpin mpin-green" style="--x:88%;--y:80%;--i:5"></span>
+        <span class="map-legend"><i class="lg-red"></i>Urgent<i class="lg-amber"></i>À planifier<i class="lg-green"></i>Résolu</span>
+      </div>
+      <div class="dash-list">
+        <p class="dash-h">Signalements · priorisés par l'IA</p>
+        <div class="tk" style="--i:0"><span class="tk-prio p-high">Haute</span><div><strong>Dépôt sauvage</strong><small>Service propreté · en intervention</small></div></div>
+        <div class="tk" style="--i:1"><span class="tk-prio p-high">Haute</span><div><strong>Nid-de-poule</strong><small>Voirie · affecté</small></div></div>
+        <div class="tk" style="--i:2"><span class="tk-prio p-mid">Moyenne</span><div><strong>Lampadaire éteint</strong><small>Éclairage public · planifié</small></div></div>
+        <div class="tk" style="--i:3"><span class="tk-prio p-done">Résolu</span><div><strong>Banc dégradé</strong><small>Citoyen informé</small></div></div>
+        <p class="dash-note">Illustration de l'interface</p>
+      </div>
+    </div>
+    <div class="mairie-foot">
+      <ul class="feature-row">
+        <li class="reveal"><svg class="ico"><use href="#i-list"/></svg><span><strong>Centralisez</strong>tous les signalements de votre commune.</span></li>
+        <li class="reveal"><svg class="ico"><use href="#i-ai"/></svg><span><strong>Priorisez</strong>automatiquement grâce à l'IA.</span></li>
+        <li class="reveal"><svg class="ico"><use href="#i-send"/></svg><span><strong>Communiquez</strong>directement avec vos administrés.</span></li>
+      </ul>
+      <a class="btn btn-red reveal" href="#contact">Découvrir Signalo Mairie <svg class="ico"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · Le workflow -->
+<section class="sec sec-workflow" id="workflow" aria-labelledby="workflow-title">
+  <div class="sec-inner">
+    <header class="sec-head sec-head-center reveal">
+      <p class="sec-eyebrow"><span class="sec-num">07</span>Le workflow</p>
+      <h2 class="sec-title" id="workflow-title">De la photo <br><span class="t-muted">à la résolution.</span></h2>
+      <p class="sec-sub">Dix étapes. Zéro friction.</p>
+    </header>
+    <ol class="flowline" data-play>
+      <li class="fl fl-green" style="--i:0"><span class="fl-dot"><svg class="ico"><use href="#i-user"/></svg></span><span class="fl-n">01</span><strong>Citoyen</strong><small>constate un problème</small></li>
+      <li class="fl fl-green" style="--i:1"><span class="fl-dot"><svg class="ico"><use href="#i-camera"/></svg></span><span class="fl-n">02</span><strong>Photo</strong><small>prise en un geste</small></li>
+      <li class="fl fl-ai" style="--i:2"><span class="fl-dot"><svg class="ico"><use href="#i-ai"/></svg></span><span class="fl-n">03</span><strong>IA</strong><small>reçoit le signalement</small></li>
+      <li class="fl fl-ai" style="--i:3"><span class="fl-dot"><svg class="ico"><use href="#i-scan"/></svg></span><span class="fl-n">04</span><strong>Analyse</strong><small>identifie le problème</small></li>
+      <li class="fl fl-ai" style="--i:4"><span class="fl-dot"><svg class="ico"><use href="#i-flag"/></svg></span><span class="fl-n">05</span><strong>Priorité</strong><small>évalue l'urgence</small></li>
+      <li class="fl fl-red" style="--i:5"><span class="fl-dot"><svg class="ico"><use href="#i-mairie"/></svg></span><span class="fl-n">06</span><strong>Mairie</strong><small>centralise et décide</small></li>
+      <li class="fl fl-red" style="--i:6"><span class="fl-dot"><svg class="ico"><use href="#i-team"/></svg></span><span class="fl-n">07</span><strong>Service</strong><small>reçoit l'affectation</small></li>
+      <li class="fl fl-red" style="--i:7"><span class="fl-dot"><svg class="ico"><use href="#i-helmet"/></svg></span><span class="fl-n">08</span><strong>Intervention</strong><small>sur le terrain</small></li>
+      <li class="fl fl-green" style="--i:8"><span class="fl-dot"><svg class="ico"><use href="#i-camera-check"/></svg></span><span class="fl-n">09</span><strong>Photo de résolution</strong><small>preuve à l'appui</small></li>
+      <li class="fl fl-green" style="--i:9"><span class="fl-dot"><svg class="ico"><use href="#i-bell"/></svg></span><span class="fl-n">10</span><strong>Citoyen informé</strong><small>la boucle est bouclée</small></li>
+    </ol>
+    <p class="flow-legend reveal"><span class="lg lg-g">Citoyen</span><span class="lg lg-a">Intelligence artificielle</span><span class="lg lg-r">Mairie</span></p>
+  </div>
+</section>
+
+<!-- 08 · La résolution -->
+<section class="sec sec-resolution" id="resolution" aria-labelledby="resolution-title">
+  <div class="sec-inner">
+    <header class="sec-head reveal">
+      <p class="sec-eyebrow"><span class="sec-num">08</span>La résolution</p>
+      <h2 class="sec-title" id="resolution-title"><span class="t-red">Problème.</span> <br><span class="t-green">Résolu.</span></h2>
+      <p class="sec-sub">Faites glisser pour voir la différence.</p>
+    </header>
+    <div class="resolution-grid">
+      <div class="compare reveal" style="--pos:50%">
+        <svg class="compare-img" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#scene-depot"/></svg>
+        <div class="compare-after" aria-hidden="true"><svg class="compare-img" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice"><use href="#scene-clean"/></svg></div>
+        <span class="compare-tag tag-before">Avant · Problème</span>
+        <span class="compare-tag tag-after">Après · Résolu</span>
+        <span class="compare-handle" aria-hidden="true"><span></span></span>
+        <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="Comparer avant et après l'intervention">
+      </div>
+      <ol class="case" data-play>
+        <li class="case-head" style="--i:0"><svg class="ico"><use href="#i-trash"/></svg>Dépôt sauvage</li>
+        <li style="--i:1"><span class="case-dot"></span>Signalé</li>
+        <li style="--i:2"><span class="case-dot"></span>Analysé par l'IA</li>
+        <li style="--i:3"><span class="case-dot"></span>Affecté</li>
+        <li style="--i:4"><span class="case-dot"></span>Intervention</li>
+        <li class="case-done" style="--i:5"><span class="case-dot"></span>Résolu</li>
+        <li class="case-done" style="--i:6"><span class="case-dot"></span>Citoyen informé</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · L'écosystème -->
+<section class="sec sec-eco" id="ecosysteme" aria-labelledby="eco-title">
+  <div class="sec-inner">
+    <header class="sec-head reveal">
+      <p class="sec-eyebrow"><span class="sec-num">09</span>L'écosystème Signalo</p>
+      <h2 class="sec-title" id="eco-title">Trois briques. <br><span class="t-muted">Un seul système.</span></h2>
+    </header>
+    <div class="eco-grid">
+      <ol class="eco-chain" data-play aria-label="Le chemin d'un signalement dans l'écosystème">
+        <li class="ec ec-green"><svg class="ico"><use href="#i-user"/></svg>Citoyen</li>
+        <li class="ec ec-brand"><span class="ec-mark" aria-hidden="true"><svg class="mark"><use href="#i-mark"/></svg></span>Signalo</li>
+        <li class="ec ec-ai"><svg class="ico"><use href="#i-ai"/></svg>IA</li>
+        <li class="ec ec-red"><svg class="ico"><use href="#i-mairie"/></svg>Mairie</li>
+        <li class="ec ec-red"><svg class="ico"><use href="#i-helmet"/></svg>Intervention</li>
+        <li class="ec ec-green"><svg class="ico"><use href="#i-check"/></svg>Résolution</li>
+      </ol>
+      <div class="eco-products">
+        <article class="product p-citizen reveal"><span class="product-ico"><svg class="ico"><use href="#i-user"/></svg></span><div><h3>Signalo Citoyen</h3><p>L'application pour signaler en quelques secondes et suivre chaque étape.</p></div></article>
+        <span class="eco-plus" aria-hidden="true">+</span>
+        <article class="product p-ai reveal"><span class="product-ico"><svg class="ico"><use href="#i-ai"/></svg></span><div><h3>Signalo AI</h3><p>Le moteur qui analyse, classe, priorise et transmet chaque signalement.</p></div></article>
+        <span class="eco-plus" aria-hidden="true">+</span>
+        <article class="product p-mairie reveal"><span class="product-ico"><svg class="ico"><use href="#i-mairie"/></svg></span><div><h3>Signalo Mairie</h3><p>Le tableau de bord pour centraliser, piloter les interventions et informer.</p></div></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · 100 % IA -->
+<section class="sec sec-manifesto" id="manifeste" aria-labelledby="manifeste-title">
+  <div class="sec-inner">
+    <p class="sec-eyebrow reveal"><span class="sec-num">10</span>Manifeste</p>
+    <h2 class="manifesto-title reveal" id="manifeste-title">100 % IA</h2>
+    <ul class="verbs" data-play aria-label="Ce que fait l'IA de Signalo">
+      <li style="--i:0">Signaler</li><li style="--i:1">Analyser</li><li style="--i:2">Prioriser</li><li style="--i:3">Agir</li><li style="--i:4">Résoudre</li>
+    </ul>
+    <p class="manifesto-line reveal">Une seule intelligence pilote tout le parcours, du signalement à la résolution.</p>
+    <ul class="pillars">
+      <li class="reveal"><strong>Aucun formulaire complexe</strong><span>Une photo suffit, l'IA complète le reste.</span></li>
+      <li class="reveal"><strong>Tri automatique</strong><span>Chaque signalement arrive au bon service.</span></li>
+      <li class="reveal"><strong>Transparence totale</strong><span>Chaque étape est visible, jusqu'à la résolution.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 11 · Versions futures -->
+<section class="sec sec-versions" id="versions" aria-labelledby="versions-title">
+  <div class="sec-inner">
+    <header class="sec-head reveal">
+      <p class="sec-eyebrow"><span class="sec-num">11</span>Versions futures</p>
+      <h2 class="sec-title" id="versions-title">Signalo grandit <br><span class="t-muted">avec votre ville.</span></h2>
+    </header>
+    <ol class="versions">
+      <li class="ver ver-1 reveal"><div class="ver-top"><span class="ver-v">V1</span><span class="ver-state is-now">Lancement</span></div><span class="ver-ico"><svg class="ico"><use href="#i-bolt"/></svg></span><h3>Signaler</h3><p>Photo intelligente, analyse d'urgence, géolocalisation et suivi en temps réel jusqu'à la résolution.</p></li>
+      <li class="ver ver-2 reveal"><div class="ver-top"><span class="ver-v">V2</span><span class="ver-state">À venir</span></div><span class="ver-ico"><svg class="ico"><use href="#i-trash"/></svg></span><h3>Dépôts sauvages</h3><p>Reconnaissance des déchets par IA, catégorisation et traçabilité jusqu'à la collecte.</p></li>
+      <li class="ver ver-3 reveal"><div class="ver-top"><span class="ver-v">V3</span><span class="ver-state">À venir</span></div><span class="ver-ico"><svg class="ico"><use href="#i-bus"/></svg></span><h3>Transport &amp; mobilité</h3><p>Perturbations signalées, alertes personnalisées et trajets optimisés.</p></li>
+      <li class="ver ver-4 reveal"><div class="ver-top"><span class="ver-v">V4</span><span class="ver-state">À venir</span></div><span class="ver-ico"><svg class="ico"><use href="#i-key"/></svg></span><h3>Objets trouvés</h3><p>IA de matching photo et description, rencontres sécurisées en mairie.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 12 · CTA final : citoyens + demande de démo mairie -->
+<section class="sec contact" id="contact" aria-labelledby="contact-title">
+  <div class="sec-inner">
+    <header class="sec-head sec-head-center reveal">
+      <p class="sec-eyebrow"><span class="sec-num">12</span>Passez à l'action</p>
+      <h2 class="sec-title sec-title-cta" id="contact-title">Je signale. <br>L'IA analyse. <br><span class="t-red">La mairie agit.</span> <br><span class="t-green">C'est résolu.</span></h2>
+    </header>
+    <div class="cta-grid">
+      <div class="cta-side">
+        <div class="cta-panel cta-citizen reveal" id="signaler">
+          <p class="cta-label"><svg class="ico"><use href="#i-user"/></svg>Pour les citoyens</p>
+          <h3>Signaler un problème</h3>
+          <p>Téléchargez l'application Signalo et signalez en quelques secondes.</p>
+          <div class="store-row">
+            <a class="store-btn" href="#" data-store="app-store"><small>Télécharger sur</small>App Store</a>
+            <a class="store-btn" href="#" data-store="google-play"><small>Disponible sur</small>Google Play</a>
+          </div>
+        </div>
+        <div class="cta-panel cta-mairie reveal">
+          <p class="cta-label"><svg class="ico"><use href="#i-mairie"/></svg>Pour les mairies</p>
+          <h3>Découvrir Signalo Mairie</h3>
+          <p>Demandez une démo : renseignez votre commune, le code postal, la ville et la population se complètent automatiquement.</p>
+          <div class="offer" id="demoBanner">
+            <p class="offer-title" id="demoBannerTitle">Offre découverte mairie</p>
+            <p class="offer-sub" id="demoBannerSub">Accompagnement de lancement offert — offre valable 14 jours.</p>
+            <div class="countdown" id="demoCountdown">
+              <div><span id="cdDays">14</span><small>jours</small></div>
+              <div><span id="cdHours">00</span><small>heures</small></div>
+              <div><span id="cdMinutes">00</span><small>min</small></div>
+              <div><span id="cdSeconds">00</span><small>sec</small></div>
+            </div>
+          </div>
+          <a class="contact-mail" href="mailto:contact@signalo.site">contact@signalo.site <span class="arrow">&#8599;</span></a>
+        </div>
+      </div>
+      <form class="contact-card reveal" id="demoMairieForm" data-email="contact@signalo.site" novalidate>
+        <div class="card-head"><span>Demande de démo mairie</span><span class="arrow">&#8599;</span></div>
+        <div class="field-grid">
+          <div class="field field-wide">
+            <label class="field-label" for="demoCommune">Nom de la mairie / commune <em>*</em></label>
+            <div class="combo">
+              <input type="text" name="commune" id="demoCommune" placeholder="Commencez à taper, ex. Versailles" autocomplete="off" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="communeSuggestions">
+              <ul class="commune-suggestions" id="communeSuggestions" role="listbox" hidden></ul>
+            </div>
+            <span class="field-hint">Auto-remplissage disponible pour les communes françaises.</span>
+          </div>
+          <label class="field"><span class="field-label">Nom et prénom du contact <em>*</em></span><input type="text" name="contact" autocomplete="name" required></label>
+          <label class="field"><span class="field-label">Fonction</span>
+            <select name="fonction">
+              <option value="">Sélectionner…</option>
+              <option>Élu(e)</option>
+              <option>DGS</option>
+              <option>Service technique</option>
+              <option>Autre</option>
+            </select>
+          </label>
+          <label class="field field-wide"><span class="field-label">Adresse de la mairie</span><input type="text" name="adresse" placeholder="Ex. 1 place de la Mairie" autocomplete="street-address"></label>
+          <label class="field"><span class="field-label">Code postal</span><input type="text" name="code_postal" placeholder="Ex. 78000" inputmode="numeric" autocomplete="postal-code"></label>
+          <label class="field"><span class="field-label">Ville</span><input type="text" name="ville" autocomplete="address-level2"></label>
+          <label class="field"><span class="field-label">E-mail professionnel <em>*</em></span><input type="email" name="email" placeholder="prenom.nom@mairie.fr" autocomplete="email" required></label>
+          <label class="field"><span class="field-label">Téléphone</span><input type="tel" name="telephone" autocomplete="tel"></label>
+          <label class="field"><span class="field-label">Population</span><input type="number" name="population_exacte" min="0" placeholder="Ex. 37 000"></label>
+          <label class="field"><span class="field-label">Besoin principal</span>
+            <select name="besoin">
+              <option value="">Sélectionner…</option>
+              <option>Centraliser les signalements</option>
+              <option>Prioriser avec l'IA</option>
+              <option>Améliorer la communication citoyenne</option>
+              <option>Autre</option>
+            </select>
+          </label>
+          <label class="field field-wide"><span class="field-label">Message <small>optionnel</small></span><textarea name="message" rows="3" placeholder="Votre contexte, vos questions…"></textarea></label>
+        </div>
+        <p class="form-msg" id="demoMairieMsg" role="alert"></p>
+        <div class="card-foot">
+          <p class="card-note">Gratuit et sans engagement.<br>Réponse sous 24 h.</p>
+          <button type="submit" class="pill-btn"><span class="btn-label">Envoyer ma demande de démo</span> <span class="arrow">&#8599;</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <span>&copy; <span id="currentYear">2026</span> — SIGNALO · Votre ville, votre voix</span>
     <span class="footer-links">
       <a href="https://signalo-page.vercel.app/privacy.html">Confidentialité</a>
       <a href="https://signalo-page.vercel.app/terms.html">Conditions d'utilisation</a>
       <a href="https://signalo-page.vercel.app/mentions-legales.html">Mentions légales</a>
     </span>
-    <span class="footer-spec">Votre ville, votre voix</span>
-    <a href="#slide-1" class="footer-top">Haut de page <span aria-hidden="true">&uarr;</span></a>
+    <a href="#hero" class="footer-top">Haut de page <span aria-hidden="true">&uarr;</span></a>
   </footer>
 </section>
+</main>
+
+<nav class="menu" id="menu" aria-label="Toutes les sections" hidden>
+  <button type="button" class="menu-close">Fermer</button>
+  <ol class="menu-list">
+    <li><a href="#hero"><span>01</span>Accueil</a></li>
+    <li><a href="#probleme"><span>02</span>Le problème</a></li>
+    <li><a href="#solution"><span>03</span>La solution</a></li>
+    <li class="m-green"><a href="#citoyen"><span>04</span>Signalo Citoyen</a></li>
+    <li><a href="#ia"><span>05</span>L'IA</a></li>
+    <li class="m-red"><a href="#mairie"><span>06</span>Signalo Mairie</a></li>
+    <li><a href="#workflow"><span>07</span>Le workflow</a></li>
+    <li><a href="#resolution"><span>08</span>La résolution</a></li>
+    <li><a href="#ecosysteme"><span>09</span>L'écosystème</a></li>
+    <li><a href="#manifeste"><span>10</span>100 % IA</a></li>
+    <li><a href="#versions"><span>11</span>Versions futures</a></li>
+    <li><a href="#contact"><span>12</span>Passer à l'action</a></li>
+  </ol>
+</nav>
+
+<nav class="rail" aria-label="Progression">
+  <a href="#hero" data-label="Accueil"></a><a href="#probleme" data-label="Le problème"></a><a href="#solution" data-label="La solution"></a>
+  <a href="#citoyen" data-label="Citoyen" class="r-green"></a><a href="#ia" data-label="L'IA"></a><a href="#mairie" data-label="Mairie" class="r-red"></a>
+  <a href="#workflow" data-label="Workflow"></a><a href="#resolution" data-label="Résolution"></a><a href="#ecosysteme" data-label="Écosystème"></a>
+  <a href="#manifeste" data-label="100 % IA"></a><a href="#versions" data-label="Versions"></a><a href="#contact" data-label="Action"></a>
+</nav>
+
 <div class="demo-confirm" id="demoConfirmOverlay" aria-hidden="true">
   <div class="demo-confirm-box" role="dialog" aria-modal="true" aria-labelledby="demoConfirmText">
     <svg class="demo-confirm-check" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34"/><path d="M24 41l11 11 21-23"/></svg>
@@ -269,17 +619,8 @@
 </div>
 <div class="grid-horizontal-line"></div>
 <div class="header-progress" aria-hidden="true"><span id="header-progress-fill"></span></div>
-<div class="story-progress" aria-hidden="true">
-  <div class="story-dashes">
-    <div class="story-dash"><div class="story-dash-fill" id="dash-fill-1"></div></div>
-    <div class="story-dash"><div class="story-dash-fill" id="dash-fill-2"></div></div>
-    <div class="story-dash"><div class="story-dash-fill" id="dash-fill-3"></div></div>
-    <div class="story-dash"><div class="story-dash-fill" id="dash-fill-4"></div></div>
-    <div class="story-dash"><div class="story-dash-fill" id="dash-fill-5"></div></div>
-    <div class="story-dash"><div class="story-dash-fill" id="dash-fill-6"></div></div>
-  </div>
-</div>
 <canvas id="webgl"></canvas>
-<script type="module" src="./js/app.js?v=20261003d"></script>
+<script src="./js/story.js?v=20261004k" defer></script>
+<script type="module" src="./js/app.js?v=20261004k"></script>
 </body>
 </html>

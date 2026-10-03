@@ -55,6 +55,16 @@ def build() -> pathlib.Path:
     html = re.sub(r'<script type="module" src="\./js/app\.js[^"]*"></script>',
                   lambda m: '<script type="module">\n' + app + '\n</script>', html)
 
+    # 4. the landing-page stylesheet and script that sit around the engine
+    signalo_css = (ROOT / 'css/signalo.css').read_text(encoding='utf-8')
+    html = re.sub(r'<link rel="stylesheet" href="\./css/signalo\.css[^"]*">',
+                  lambda m: '<style>\n' + signalo_css + '\n</style>', html)
+    story_js = (ROOT / 'js/story.js').read_text(encoding='utf-8')
+    if '</script' in story_js:
+        raise SystemExit('js/story.js contains a closing script tag')
+    html = re.sub(r'<script src="\./js/story\.js[^"]*" defer></script>',
+                  lambda m: '<script>\n' + story_js + '\n</script>', html)
+
     out = ROOT / 'version-monofichier.html'
     out.write_text(html, encoding='utf-8')
     return out

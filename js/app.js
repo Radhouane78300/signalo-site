@@ -55,7 +55,7 @@ const clock = new THREE.Clock();
 let currentScroll = 0;   // smoothed accumulated scroll for lerping
 let currentContact = 0, targetContact = 0;   // 0..1 progress into the contact chapter
 const stageElement = document.querySelector('.scroll-stage');
-const contactSection = document.querySelector('#contact');
+const contactSection = document.querySelector('#story');   // the page flow that follows the stage
 const contactCardElement = document.querySelector('.contact-card');
 let glassCard;                 // liquid-glass slab pinned behind the contact card
 let cardGlass;                 // its smoked, frosted material
@@ -647,9 +647,9 @@ function createGlassCard() {
 // Pin the slab to the live DOM rectangle of the card (rebuilt only when its size changes).
 function updateGlassCard() {
     if (!glassCard || !contactCardElement) return;
-    glassCard.visible = targetContact > 0.001;
-    if (!glassCard.visible) return;
     const rect = contactCardElement.getBoundingClientRect();
+    glassCard.visible = targetContact > 0.001 && rect.bottom > 0 && rect.top < sizes.height;
+    if (!glassCard.visible) return;
     const upp = cardUnitsPerPixel();
     const w = rect.width * upp, h = rect.height * upp;
     if (Math.abs(glassCard.userData.w - w) > 0.003 || Math.abs(glassCard.userData.h - h) > 0.003) {
@@ -680,23 +680,37 @@ function smoothScrollRange(scroll, start, end) {
 // object taking the lower half on slides 1 and 3 and the upper half on 2 and 4.
 function cameraFrame(scroll) {
     const aspect = sizes.width / sizes.height;
-    const portrait = THREE.MathUtils.clamp((1.0 - aspect) / 0.2, 0, 1);
+    const portrait = THREE.MathUtils.clamp((1.0 - aspect) / 0.06, 0, 1);
     const separation = getLogoSeparation(scroll);
     const morph = smoothScrollRange(scroll, 0.40, 0.54);
-    const landscapeRadius = 4.7 - Math.sin(scroll * Math.PI) * 0.6 + separation * 2.6 + morph * 0.9;
-    const portraitRadius = 8.9 - Math.sin(scroll * Math.PI) * 0.4 + separation * 2.0 + morph * 0.4;
-    const radius = lerp(landscapeRadius, portraitRadius, portrait);
+    // Narrower landscape screens (4:3 laptops, tablets on their side): a slightly smaller
+    // object pushed further aside, so the copy column keeps its room.
+    const narrow = THREE.MathUtils.clamp((1.6 - aspect) / 0.4, 0, 1);
+    const landscapeRadius = 4.7 + narrow * 0.8 - Math.sin(scroll * Math.PI) * 0.6 + separation * 2.6 + morph * 0.9;
     // Landscape: shift the object sideways so it never sits under a text block.
-    // One weight per chapter, negative pushes the object right (text on the left):
-    // odd chapters carry their text on the left, even ones on the right.
-    // Portrait: +1 puts the object low on screen, -1 high; alternates per chapter.
-    let x = CHAPTER_SIDES[0], stack = 1;
+    // One weight per chapter, negative pushes the object right (text on the left).
+    // Portrait: the object is sized and centred in the free band each chapter's copy
+    // leaves on screen (see portraitFits); +1 means low on screen, -1 high.
+    const fits = portrait > 0 ? portraitFits() : null;
+    let x = CHAPTER_SIDES[0];
+    let stack = fits ? fits[0].stack : CHAPTER_STACKS[0];
+    let fitRadius = fits ? fits[0].radius : 9.8;
     CHAPTER_GAPS.forEach(([start, end], i) => {
         const t = smoothScrollRange(scroll, start - 0.02, end + 0.02);
         x += (CHAPTER_SIDES[i + 1] - CHAPTER_SIDES[i]) * t;
-        stack += (i % 2 === 0 ? -2 : 2) * t;
+        if (fits) {
+            stack += (fits[i + 1].stack - fits[i].stack) * t;
+            fitRadius += (fits[i + 1].radius - fits[i].radius) * t;
+        } else {
+            stack += (CHAPTER_STACKS[i + 1] - CHAPTER_STACKS[i]) * t;
+        }
     });
-    x *= 1 - portrait;
+    // The fitted radius already allows for the fragments' spread on the problem chapter.
+    const portraitRadius = fits
+        ? fitRadius - Math.sin(scroll * Math.PI) * 0.3 + morph * 0.4
+        : 9.8 - Math.sin(scroll * Math.PI) * 0.4 + separation * 2.0 + morph * 0.4;
+    const radius = lerp(landscapeRadius, portraitRadius, portrait);
+    x *= (1 - portrait) * (1 + narrow * 0.3);
     const visibleHeight = 2 * radius * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     // Object centre at 70 % of the height when low, 31 % when high (clear of the header).
     const y = -0.15 + portrait * stack * (stack > 0 ? 0.20 : 0.19) * visibleHeight;
@@ -705,6 +719,38 @@ function cameraFrame(scroll) {
     const right = new THREE.Vector3(Math.cos(phi), 0, -Math.sin(phi));
     const lookAt = new THREE.Vector3(0, y, 0).addScaledVector(right, x);
     return { radius, lookAt, portrait };
+}
+
+// Portrait framing per stage chapter, measured on the live layout: the band of screen
+// the copy leaves free (between the hero's title and its lead, under the header above
+// the problem's copy, below the solution's copy), turned into an orbit radius that fits
+// the object in it and a vertical position that centres it there. Calibrated on the
+// glass tile: it fills about 4.25 / radius of the screen height; the four fragments of
+// the problem chapter spread to about 1.5 times that.
+const OBJECT_HEIGHT = 4.25, SPREAD = 1.5;
+let fitCache = null, fitStamp = 0;
+function portraitFits() {
+    const now = performance.now();
+    if (fitCache && now - fitStamp < 400) return fitCache;
+    const rect = selector => document.querySelector(selector)?.getBoundingClientRect();
+    const head = rect('.hero-head'), foot = rect('.hero-foot'), problem = rect('#slide-2'), solution = rect('#slide-3');
+    const header = rect('.main-header');
+    if (!head || !foot || !problem || !solution || !header) return null;
+    const vh = sizes.height;
+    const bands = [
+        [head.bottom + 12, foot.top - 12, 1],
+        [header.bottom + 8, problem.top - 12, SPREAD],
+        [solution.bottom + 12, vh - 12, 1]
+    ];
+    fitCache = bands.map(([top, bottom, spread]) => {
+        const band = Math.max(60, bottom - top);
+        return {
+            radius: THREE.MathUtils.clamp(OBJECT_HEIGHT * spread * vh / (band * 0.94), 8.5, 26),
+            stack: ((top + bottom) / 2 / vh - 0.522) / 0.2
+        };
+    });
+    fitStamp = now;
+    return fitCache;
 }
 
 function getLogoSeparation(scroll) {
@@ -904,10 +950,11 @@ function updateCursorLabel() {
     if (!label) return;
     label.style.left = `${outerCursorX}px`;
     label.style.top = `${outerCursorY}px`;
-    const text = targetContact > 0.02 ? 'CONTACT' : String(Math.round(currentScroll * 100)).padStart(3, '0');
+    const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const text = String(Math.round(Math.min(1, window.scrollY / total) * 100)).padStart(3, '0');
     if (text !== cursorLabelText) { label.textContent = text; cursorLabelText = text; }
 }
-window.addEventListener('resize', () => { onWindowResize(); headerState.chapter = -1; fitTitles(); });
+window.addEventListener('resize', () => { onWindowResize(); fitTitles(); });
 
 function splitTitlesIntoLines() {
     document.querySelectorAll('.slide-title').forEach(title => {
@@ -944,6 +991,7 @@ function fitTitles() {
 }
 
 let animationRequest = 0;
+let stageFrozen = false;
 let lastFrameAt = 0;
 let lastInputAt = performance.now();
 for (const event of ['scroll', 'pointermove', 'pointerdown', 'keydown', 'resize']) {
@@ -967,6 +1015,11 @@ function animate(now = performance.now()) {
     const fps = unsettled || now - lastInputAt < 1500 ? 60 : 30;
     if (lastFrameAt && now - lastFrameAt < 1000 / fps - 1) return;
     lastFrameAt = now;
+    step();
+}
+
+// One frame of the scene: scroll smoothing, camera, slides, render.
+function step() {
     const deltaTime = Math.min(clock.getDelta(), 0.1);
     const damping = factor => 1 - Math.pow(1 - factor, deltaTime * 60);
 
@@ -1054,22 +1107,16 @@ function animate(now = performance.now()) {
 
     updateLogoPieces(currentScroll);
     updateSlides(currentScroll);
-    updateHeader(currentScroll);
+    updateHeader();
     updateContact();
-    renderer.render(scene, camera);
+    const stageHidden = currentContact >= 0.999 && !(glassCard && glassCard.visible);
+    if (!stageHidden || !stageFrozen) renderer.render(scene, camera);
+    stageFrozen = stageHidden;
 }
 
 // Header: active chapter link, chapter counter, progress hairline.
-const headerState = { chapter: -1, progress: '' };
-function updateHeader(scroll) {
-    const links = document.querySelectorAll('.header-nav .nav-link');
-    const chapter = targetContact > 0.02 ? SLIDE_WINDOWS.length : CHAPTER_BREAKS.filter(t => scroll >= t).length;
-    if (chapter !== headerState.chapter) {
-        headerState.chapter = chapter;
-        links.forEach((link, index) => link.classList.toggle('is-active', index === chapter));
-        const counter = document.getElementById('brand-chapter');
-        if (counter) counter.textContent = String(chapter + 1).padStart(2, '0');
-    }
+const headerState = { progress: '' };
+function updateHeader() {
     const fill = document.getElementById('header-progress-fill');
     if (fill) {
         const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -1082,10 +1129,12 @@ function updateHeader(scroll) {
 // fast scroll: a slide stays at least MIN_SHOW ms once shown and lingers LEAVE_HOLD ms
 // after the scroll leaves its window, unless the next chapter takes over.
 // Six chapters; the gaps between windows are where the camera swaps sides.
-const SLIDE_WINDOWS = [[-0.10, 0.10], [0.16, 0.28], [0.34, 0.46], [0.52, 0.64], [0.70, 0.82], [0.88, 1.05]];
+const SLIDE_WINDOWS = [[-0.10, 0.17], [0.24, 0.48], [0.58, 1.05]];
 const CHAPTER_GAPS = SLIDE_WINDOWS.slice(1).map(([start], i) => [SLIDE_WINDOWS[i][1], start]);
 const CHAPTER_BREAKS = CHAPTER_GAPS.map(([start, end]) => (start + end) / 2);
-const CHAPTER_SIDES = [-1.5, 3.1, -2.9, 2.0, -1.6, 2.0];
+const CHAPTER_SIDES = [-1.5, 3.0, -1.7];
+// Portrait: +1 puts the object low on screen, -1 high, 0 centred.
+const CHAPTER_STACKS = [0.05, -1, 1.1];
 const SLIDE_MIN_SHOW = 1500, SLIDE_LEAVE_HOLD = 400;
 const slideState = SLIDE_WINDOWS.map(() => ({ active: false, since: 0, left: 0 }));
 
@@ -1124,7 +1173,6 @@ function updateSlides(scroll) {
         return false;
     });
     slides.forEach((slide, index) => { if (slide) slide.classList.toggle('active', actives[index]); });
-    playFigures(actives[3]);
 }
 
 // Slide 4 key figures count up each time the chapter appears.
@@ -1152,31 +1200,6 @@ function playFigures(show) {
         if (t < 1) requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);
-}
-
-function setupNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const targetScrolls = SLIDE_WINDOWS.map(([start, end], i) => i === 0 ? 0 : Math.min(1, (start + end) / 2));
-    navLinks.forEach((link, index) => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetY = stageMaxScroll() * targetScrolls[index];
-            window.scrollTo({ top: targetY, behavior: 'smooth' });
-        });
-    });
-    document.querySelectorAll('.brand, .footer-top').forEach(link => {
-        link.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-    });
-    if (contactSection) {
-        document.querySelectorAll('a[href="#contact"]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: contactSection.offsetTop, behavior: 'smooth' });
-            });
-        });
-    }
-    // Store badges stay inert until their links are set in index.html.
-    document.querySelectorAll('a[href="#"]').forEach(link => link.addEventListener('click', e => e.preventDefault()));
 }
 
 function updateContact() {
@@ -1416,7 +1439,29 @@ window.__glassSite = {
     mailto() { const form = document.getElementById('demoMairieForm'); return form ? buildMailto(form) : null; },
     get scroll() { return currentScroll; },
     get contact() { return currentContact; },
-    get pieces() { return logoPieces.map(p => ({ name: p.name, points: p.correspondence.length })); }
+    get pieces() { return logoPieces.map(p => ({ name: p.name, points: p.correspondence.length })); },
+    // Run frames now, even in a background tab (layout checks in tools/layout-audit.js).
+    tick(frames = 1) { for (let i = 0; i < frames; i++) step(); },
+    // Screen rectangles (CSS px) of the visible glass pieces, for layout checks against the copy.
+    objectRects() {
+        if (!modelPivot || !camera) return [];
+        modelPivot.updateWorldMatrix(true, true);
+        camera.updateMatrixWorld();
+        const rects = [];
+        modelPivot.traverseVisible(node => {
+            if (!node.isMesh || !node.geometry) return;
+            if (!node.geometry.boundingBox) node.geometry.computeBoundingBox();
+            const box = node.geometry.boundingBox.clone().applyMatrix4(node.matrixWorld);
+            let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+            for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) {
+                const p = new THREE.Vector3(x, y, z).project(camera);
+                const sx = (p.x + 1) / 2 * sizes.width, sy = (1 - p.y) / 2 * sizes.height;
+                left = Math.min(left, sx); right = Math.max(right, sx); top = Math.min(top, sy); bottom = Math.max(bottom, sy);
+            }
+            rects.push({ left, top, right, bottom });
+        });
+        return rects;
+    }
 };
 
 function init() {
@@ -1484,7 +1529,6 @@ function init() {
     // Commit the hidden letter state before the first reveal.
     document.querySelector('.slide-title').getBoundingClientRect();
     animate();
-    setupNavigation();
     setupContactForm();
     // First frame rendered, shaders compiled: release the preloader once fonts are in.
     const release = () => { fitTitles(); if (window.__glassLoader) window.__glassLoader.done(); };
