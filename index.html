@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Signalo — Signaler. Améliorer. Votre ville.</title>
 <meta name="description" content="Signalo, la plateforme 100 % IA qui transforme chaque signalement citoyen en action concrète pour la ville : je signale, l'IA analyse, la mairie agit, le problème est résolu.">
-<link rel="stylesheet" href="./css/styles.css?v=20261004k">
-<link rel="stylesheet" href="./css/signalo.css?v=20261004k">
+<link rel="stylesheet" href="./css/styles.css?v=20261004p">
+<link rel="stylesheet" href="./css/signalo.css?v=20261004p">
 <script type="importmap">
 {
   "imports": {
@@ -147,7 +147,6 @@
   </symbol>
 </svg>
 
-<div class="cinematic-container">
 <div class="main-header">
   <a class="brand" href="#hero" aria-label="Signalo, retour en haut">
     <span class="brand-mark" aria-hidden="true"><svg class="mark"><use href="#i-mark"/></svg></span>
@@ -168,6 +167,7 @@
   </div>
 </div>
 
+<div class="cinematic-container">
 <!-- 01 · Hero (3D stage) -->
 <div class="slide stage-slide hero" id="slide-1">
   <div class="hero-head">
@@ -218,12 +218,12 @@
   <p class="slide-eyebrow"><span class="eyebrow-num">02</span>Le problème</p>
   <h2 class="slide-title problem-title">Une ville. <br>Des milliers <br>de problèmes. <br>Une seule plateforme.</h2>
   <ul class="problem-cloud">
-    <li style="--i:0"><svg class="ico"><use href="#i-trash"/></svg>Dépôt sauvage</li>
-    <li style="--i:1"><svg class="ico"><use href="#i-road"/></svg>Voirie</li>
-    <li style="--i:2"><svg class="ico"><use href="#i-bulb"/></svg>Éclairage</li>
-    <li style="--i:3"><svg class="ico"><use href="#i-spark"/></svg>Propreté</li>
-    <li style="--i:4"><svg class="ico"><use href="#i-bench"/></svg>Mobilier urbain</li>
-    <li style="--i:5"><svg class="ico"><use href="#i-sign"/></svg>Signalisation</li>
+    <li style="--i:0"><img class="chip-art" src="./assets/img/glass-sofa.webp" alt="" width="176" height="139" decoding="async"><span>Dépôt sauvage</span></li>
+    <li style="--i:1"><img class="chip-art" src="./assets/img/glass-bin.webp" alt="" width="176" height="144" decoding="async"><span>Propreté</span></li>
+    <li style="--i:2"><img class="chip-art" src="./assets/img/glass-lamp.webp" alt="" width="149" height="176" decoding="async"><span>Éclairage</span></li>
+    <li style="--i:3"><img class="chip-art" src="./assets/img/glass-tree.webp" alt="" width="176" height="136" decoding="async"><span>Espaces verts</span></li>
+    <li style="--i:4"><img class="chip-art" src="./assets/img/glass-road.webp" alt="" width="176" height="143" decoding="async"><span>Voirie &amp; sécurité</span></li>
+    <li style="--i:5"><img class="chip-art" src="./assets/img/glass-house.webp" alt="" width="176" height="150" decoding="async"><span>Autres signalements</span></li>
   </ul>
 </div>
 
@@ -332,47 +332,19 @@
       <h2 class="sec-title" id="mairie-title">Signalo <span class="t-red">Mairie</span></h2>
       <p class="sec-sub">Tout ce que la ville doit savoir. <br>Au bon moment.</p>
     </header>
-    <div class="dash reveal" aria-hidden="true">
-      <aside class="dash-nav">
-        <span class="dash-logo"><svg class="mark"><use href="#i-mark"/></svg></span>
-        <span class="dn is-on"><svg class="ico"><use href="#i-map"/></svg>Carte</span>
-        <span class="dn"><svg class="ico"><use href="#i-list"/></svg>Signalements</span>
-        <span class="dn"><svg class="ico"><use href="#i-gauge"/></svg>Priorités</span>
-        <span class="dn"><svg class="ico"><use href="#i-team"/></svg>Services</span>
-        <span class="dn"><svg class="ico"><use href="#i-helmet"/></svg>Interventions</span>
-        <span class="dn"><svg class="ico"><use href="#i-track"/></svg>Suivi</span>
-        <span class="dn"><svg class="ico"><use href="#i-check"/></svg>Résolution</span>
-      </aside>
-      <div class="dash-map">
-        <svg viewBox="0 0 360 240" preserveAspectRatio="xMidYMid slice">
-          <rect width="360" height="240" fill="#0a0e0b"/>
-          <path d="M-10 150 C 60 130, 120 170, 190 150 S 300 110, 370 130" stroke="#0f2430" stroke-width="16" fill="none"/>
-          <g stroke="#1b231d" stroke-width="7" fill="none"><path d="M0 60h360M0 200h360M70 0v240M160 0v240M250 0v240M320 0v240"/><path d="M0 10 L120 120 L360 240" stroke-width="5"/></g>
-          <g fill="#111813"><rect x="8" y="8" width="54" height="44" rx="5"/><rect x="80" y="8" width="72" height="44" rx="5"/><rect x="170" y="8" width="72" height="44" rx="5"/><rect x="260" y="8" width="52" height="44" rx="5"/><rect x="80" y="68" width="72" height="60" rx="5"/><rect x="170" y="68" width="72" height="56" rx="5"/><rect x="260" y="68" width="52" height="46" rx="5"/><rect x="8" y="208" width="54" height="30" rx="5"/><rect x="170" y="208" width="72" height="30" rx="5"/><rect x="260" y="208" width="52" height="30" rx="5"/></g>
-        </svg>
-        <span class="mpin mpin-red" style="--x:28%;--y:30%;--i:0"></span>
-        <span class="mpin mpin-red" style="--x:64%;--y:62%;--i:1"></span>
-        <span class="mpin mpin-amber" style="--x:46%;--y:22%;--i:2"></span>
-        <span class="mpin mpin-amber" style="--x:80%;--y:40%;--i:3"></span>
-        <span class="mpin mpin-green" style="--x:16%;--y:72%;--i:4"></span>
-        <span class="mpin mpin-green" style="--x:88%;--y:80%;--i:5"></span>
-        <span class="map-legend"><i class="lg-red"></i>Urgent<i class="lg-amber"></i>À planifier<i class="lg-green"></i>Résolu</span>
-      </div>
-      <div class="dash-list">
-        <p class="dash-h">Signalements · priorisés par l'IA</p>
-        <div class="tk" style="--i:0"><span class="tk-prio p-high">Haute</span><div><strong>Dépôt sauvage</strong><small>Service propreté · en intervention</small></div></div>
-        <div class="tk" style="--i:1"><span class="tk-prio p-high">Haute</span><div><strong>Nid-de-poule</strong><small>Voirie · affecté</small></div></div>
-        <div class="tk" style="--i:2"><span class="tk-prio p-mid">Moyenne</span><div><strong>Lampadaire éteint</strong><small>Éclairage public · planifié</small></div></div>
-        <div class="tk" style="--i:3"><span class="tk-prio p-done">Résolu</span><div><strong>Banc dégradé</strong><small>Citoyen informé</small></div></div>
-        <p class="dash-note">Illustration de l'interface</p>
-      </div>
-    </div>
+    <figure class="shot reveal">
+      <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i><span>Signalo Mairie · plateforme municipale</span></div>
+      <img src="./assets/img/mairie-dashboard.webp" width="1340" height="556" loading="lazy" decoding="async"
+           alt="Interface Signalo Mairie : carte de la commune avec les signalements géolocalisés, et le menu tableau de bord, signalements, tickets de service, workflow, performance municipale, alertes et info citoyennes, agenda, messagerie.">
+      <figcaption>L'interface Signalo Mairie : la carte de la commune et chaque signalement en temps réel.</figcaption>
+    </figure>
     <div class="mairie-foot">
-      <ul class="feature-row">
-        <li class="reveal"><svg class="ico"><use href="#i-list"/></svg><span><strong>Centralisez</strong>tous les signalements de votre commune.</span></li>
-        <li class="reveal"><svg class="ico"><use href="#i-ai"/></svg><span><strong>Priorisez</strong>automatiquement grâce à l'IA.</span></li>
-        <li class="reveal"><svg class="ico"><use href="#i-send"/></svg><span><strong>Communiquez</strong>directement avec vos administrés.</span></li>
-      </ul>
+      <ol class="neon-steps">
+        <li class="reveal" style="--i:0"><img class="neon-art" src="./assets/img/neon-m-recevez.webp" alt="" width="144" height="127" decoding="async"><span class="ns-n">1</span><h3>Recevez</h3><p>Chaque signalement arrive centralisé sur votre tableau de bord.</p></li>
+        <li class="reveal" style="--i:1"><img class="neon-art" src="./assets/img/neon-m-analysez.webp" alt="" width="144" height="127" decoding="async"><span class="ns-n">2</span><h3>Analysez &amp; assignez</h3><p>L'IA priorise et oriente vers la bonne équipe.</p></li>
+        <li class="reveal" style="--i:2"><img class="neon-art" src="./assets/img/neon-m-intervenez.webp" alt="" width="144" height="127" decoding="async"><span class="ns-n">3</span><h3>Intervenez</h3><p>Les équipes agissent sur le terrain et mettent à jour le statut.</p></li>
+        <li class="reveal" style="--i:3"><img class="neon-art" src="./assets/img/neon-m-informez.webp" alt="" width="144" height="127" decoding="async"><span class="ns-n">4</span><h3>Informez</h3><p>Le citoyen est notifié : la confiance et la transparence grandissent.</p></li>
+      </ol>
       <a class="btn btn-red reveal" href="#contact">Découvrir Signalo Mairie <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
@@ -421,12 +393,12 @@
       </div>
       <ol class="case" data-play>
         <li class="case-head" style="--i:0"><svg class="ico"><use href="#i-trash"/></svg>Dépôt sauvage</li>
-        <li style="--i:1"><span class="case-dot"></span>Signalé</li>
-        <li style="--i:2"><span class="case-dot"></span>Analysé par l'IA</li>
-        <li style="--i:3"><span class="case-dot"></span>Affecté</li>
-        <li style="--i:4"><span class="case-dot"></span>Intervention</li>
-        <li class="case-done" style="--i:5"><span class="case-dot"></span>Résolu</li>
-        <li class="case-done" style="--i:6"><span class="case-dot"></span>Citoyen informé</li>
+        <li style="--i:1"><span class="case-dot"><img src="./assets/img/neon-c-signalez.webp" alt="" width="144" height="127" loading="lazy" decoding="async"></span>Signalé</li>
+        <li style="--i:2"><span class="case-dot is-tinted"><img src="./assets/img/neon-m-analysez.webp" alt="" width="144" height="127" loading="lazy" decoding="async"></span>Analysé par l'IA</li>
+        <li style="--i:3"><span class="case-dot"><img src="./assets/img/neon-c-prise.webp" alt="" width="144" height="127" loading="lazy" decoding="async"></span>Affecté</li>
+        <li style="--i:4"><span class="case-dot"><img src="./assets/img/neon-c-intervention.webp" alt="" width="144" height="127" loading="lazy" decoding="async"></span>Intervention</li>
+        <li class="case-done" style="--i:5"><span class="case-dot"><img src="./assets/img/neon-c-resolu.webp" alt="" width="144" height="127" loading="lazy" decoding="async"></span>Résolu</li>
+        <li class="case-done" style="--i:6"><span class="case-dot is-tinted"><img src="./assets/img/neon-m-informez.webp" alt="" width="144" height="127" loading="lazy" decoding="async"></span>Citoyen informé</li>
       </ol>
     </div>
   </div>
@@ -502,12 +474,17 @@
     <div class="cta-grid">
       <div class="cta-side">
         <div class="cta-panel cta-citizen reveal" id="signaler">
-          <p class="cta-label"><svg class="ico"><use href="#i-user"/></svg>Pour les citoyens</p>
-          <h3>Signaler un problème</h3>
-          <p>Téléchargez l'application Signalo et signalez en quelques secondes.</p>
-          <div class="store-row">
-            <a class="store-btn" href="#" data-store="app-store"><small>Télécharger sur</small>App Store</a>
-            <a class="store-btn" href="#" data-store="google-play"><small>Disponible sur</small>Google Play</a>
+          <div class="cta-split">
+            <div>
+              <p class="cta-label"><svg class="ico"><use href="#i-user"/></svg>Pour les citoyens</p>
+              <h3>Signaler un problème</h3>
+              <p>Téléchargez l'application Signalo et signalez en quelques secondes.</p>
+              <div class="store-row">
+                <a class="store-btn" href="#" data-store="app-store"><small>Télécharger sur</small>App Store</a>
+                <a class="store-btn" href="#" data-store="google-play"><small>Disponible sur</small>Google Play</a>
+              </div>
+            </div>
+            <img class="cta-art" src="./assets/img/glass-phone.webp" alt="" width="360" height="335" loading="lazy" decoding="async">
           </div>
         </div>
         <div class="cta-panel cta-mairie reveal">
@@ -620,7 +597,7 @@
 <div class="grid-horizontal-line"></div>
 <div class="header-progress" aria-hidden="true"><span id="header-progress-fill"></span></div>
 <canvas id="webgl"></canvas>
-<script src="./js/story.js?v=20261004k" defer></script>
-<script type="module" src="./js/app.js?v=20261004k"></script>
+<script src="./js/story.js?v=20261004p" defer></script>
+<script type="module" src="./js/app.js?v=20261004p"></script>
 </body>
 </html>

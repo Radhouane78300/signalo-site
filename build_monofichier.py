@@ -65,6 +65,10 @@ def build() -> pathlib.Path:
     html = re.sub(r'<script src="\./js/story\.js[^"]*" defer></script>',
                   lambda m: '<script>\n' + story_js + '\n</script>', html)
 
+    # 5. the illustrations, so the file also opens away from the project folder
+    html = re.sub(r'src="\./assets/img/([a-z0-9-]+\.webp)"',
+                  lambda m: 'src="' + data_uri(ROOT / 'assets/img' / m.group(1), 'image/webp') + '"', html)
+
     out = ROOT / 'version-monofichier.html'
     out.write_text(html, encoding='utf-8')
     return out

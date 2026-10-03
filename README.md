@@ -46,6 +46,7 @@ python build_monofichier.py
 | Liens App Store / Google Play | `index.html`, liens `data-store` (actuellement `#`) |
 | Adresse e-mail de contact | `index.html`, attribut `data-email` du formulaire et lien `mailto:` |
 | Serveur qui reçoit les demandes de démo | `js/app.js`, constante `DEMO_ENDPOINT` |
+| Illustrations (objets en verre, icônes néon, capture Signalo Mairie) | `assets/img/` (WebP) |
 
 Tant que `DEMO_ENDPOINT` est vide, le formulaire ouvre la messagerie du visiteur avec
 la demande rédigée. Renseignez l'adresse de votre API : la demande y sera envoyée en
