@@ -687,16 +687,16 @@ function cameraFrame(scroll) {
     const portraitRadius = 8.9 - Math.sin(scroll * Math.PI) * 0.4 + separation * 2.0 + morph * 0.4;
     const radius = lerp(landscapeRadius, portraitRadius, portrait);
     // Landscape: shift the object sideways so it never sits under a text block.
-    // One weight per chapter, negative pushes the object right (text on the left).
-    const ch1 = 1 - smoothScrollRange(scroll, 0.12, 0.24);
-    const ch2 = smoothScrollRange(scroll, 0.12, 0.24) - smoothScrollRange(scroll, 0.40, 0.50);
-    const ch3 = smoothScrollRange(scroll, 0.52, 0.62) - smoothScrollRange(scroll, 0.74, 0.86);
-    const ch4 = smoothScrollRange(scroll, 0.74, 0.86);
-    const x = (-1.5 * ch1 + 1.5 * ch2 - 1.8 * ch3 - 1.4 * ch4) * (1 - portrait);
+    // One weight per chapter, negative pushes the object right (text on the left):
+    // odd chapters carry their text on the left, even ones on the right.
     // Portrait: +1 puts the object low on screen, -1 high; alternates per chapter.
-    const stack = 1 - 2 * smoothScrollRange(scroll, 0.16, 0.26)
-        + 2 * smoothScrollRange(scroll, 0.44, 0.54)
-        - 2 * smoothScrollRange(scroll, 0.72, 0.82);
+    let x = CHAPTER_SIDES[0], stack = 1;
+    CHAPTER_GAPS.forEach(([start, end], i) => {
+        const t = smoothScrollRange(scroll, start - 0.02, end + 0.02);
+        x += (CHAPTER_SIDES[i + 1] - CHAPTER_SIDES[i]) * t;
+        stack += (i % 2 === 0 ? -2 : 2) * t;
+    });
+    x *= 1 - portrait;
     const visibleHeight = 2 * radius * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     // Object centre at 70 % of the height when low, 31 % when high (clear of the header).
     const y = -0.15 + portrait * stack * (stack > 0 ? 0.20 : 0.19) * visibleHeight;
@@ -1063,7 +1063,7 @@ function animate(now = performance.now()) {
 const headerState = { chapter: -1, progress: '' };
 function updateHeader(scroll) {
     const links = document.querySelectorAll('.header-nav .nav-link');
-    const chapter = targetContact > 0.02 ? 4 : scroll < 0.20 ? 0 : scroll < 0.48 ? 1 : scroll < 0.76 ? 2 : 3;
+    const chapter = targetContact > 0.02 ? SLIDE_WINDOWS.length : CHAPTER_BREAKS.filter(t => scroll >= t).length;
     if (chapter !== headerState.chapter) {
         headerState.chapter = chapter;
         links.forEach((link, index) => link.classList.toggle('is-active', index === chapter));
@@ -1081,17 +1081,22 @@ function updateHeader(scroll) {
 // Chapter windows (smoothed scroll) and hold times so copy never flashes past on a
 // fast scroll: a slide stays at least MIN_SHOW ms once shown and lingers LEAVE_HOLD ms
 // after the scroll leaves its window, unless the next chapter takes over.
-const SLIDE_WINDOWS = [[-0.10, 0.15], [0.26, 0.43], [0.54, 0.71], [0.82, 1.05]];
+// Six chapters; the gaps between windows are where the camera swaps sides.
+const SLIDE_WINDOWS = [[-0.10, 0.10], [0.16, 0.28], [0.34, 0.46], [0.52, 0.64], [0.70, 0.82], [0.88, 1.05]];
+const CHAPTER_GAPS = SLIDE_WINDOWS.slice(1).map(([start], i) => [SLIDE_WINDOWS[i][1], start]);
+const CHAPTER_BREAKS = CHAPTER_GAPS.map(([start, end]) => (start + end) / 2);
+const CHAPTER_SIDES = [-1.5, 3.1, -2.9, 2.0, -1.6, 2.0];
 const SLIDE_MIN_SHOW = 1500, SLIDE_LEAVE_HOLD = 400;
 const slideState = SLIDE_WINDOWS.map(() => ({ active: false, since: 0, left: 0 }));
 
 function updateSlides(scroll) {
-    const slides = [1, 2, 3, 4].map(i => document.getElementById(`slide-${i}`));
-    for (let i = 1; i <= 4; i++) {
+    const count = SLIDE_WINDOWS.length;
+    const slides = SLIDE_WINDOWS.map((_, i) => document.getElementById(`slide-${i + 1}`));
+    for (let i = 1; i <= count; i++) {
         const fill = document.getElementById(`dash-fill-${i}`);
         if (fill) {
-            const start = (i - 1) * 0.25;
-            const end = i * 0.25;
+            const start = (i - 1) / count;
+            const end = i / count;
             let progress = (scroll - start) / (end - start);
             progress = Math.max(0, Math.min(1, progress));
             fill.style.height = `${progress * 100}%`;
@@ -1151,7 +1156,7 @@ function playFigures(show) {
 
 function setupNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
-    const targetScrolls = [0.0, 0.34, 0.62, 0.94];
+    const targetScrolls = SLIDE_WINDOWS.map(([start, end], i) => i === 0 ? 0 : Math.min(1, (start + end) / 2));
     navLinks.forEach((link, index) => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1162,13 +1167,16 @@ function setupNavigation() {
     document.querySelectorAll('.brand, .footer-top').forEach(link => {
         link.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
     });
-    const contactButton = document.querySelector('.contact-btn');
-    if (contactButton && contactSection) {
-        contactButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: contactSection.offsetTop, behavior: 'smooth' });
+    if (contactSection) {
+        document.querySelectorAll('a[href="#contact"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: contactSection.offsetTop, behavior: 'smooth' });
+            });
         });
     }
+    // Store badges stay inert until their links are set in index.html.
+    document.querySelectorAll('a[href="#"]').forEach(link => link.addEventListener('click', e => e.preventDefault()));
 }
 
 function updateContact() {
@@ -1177,27 +1185,212 @@ function updateContact() {
     contactSection.classList.toggle('is-visible', currentContact > 0.45);
 }
 
-// The form opens the visitor's mail client with a ready-to-send message.
+// ---- Mairie demo request ------------------------------------------------------
+// The commune field completes itself from the French government's open API
+// (geo.api.gouv.fr: postcode, town, population). On submit the request is POSTed as
+// JSON to DEMO_ENDPOINT when one is set; otherwise, or if that call fails, the
+// visitor's mail client opens with the request written out, ready to send.
+const DEMO_ENDPOINT = '';   // e.g. 'https://api.example.com/prospection/demo-mairie'
+const OFFER_DAYS = 14;      // launch offer, counted from the visitor's first visit
+
+function offerDeadline() {
+    let first = Date.now();
+    try {
+        const stored = Number(localStorage.getItem('signalo_first_visit'));
+        if (stored && stored <= first) first = stored;
+        else localStorage.setItem('signalo_first_visit', String(first));
+    } catch (error) { /* storage unavailable: the offer counts from this visit */ }
+    return new Date(first + OFFER_DAYS * 86400000);
+}
+
+function setupOfferCountdown() {
+    const banner = document.getElementById('demoBanner');
+    if (!banner) return;
+    const deadline = offerDeadline();
+    const units = ['cdDays', 'cdHours', 'cdMinutes', 'cdSeconds'].map(id => document.getElementById(id));
+    let timer = 0;
+    const tick = () => {
+        const left = deadline.getTime() - Date.now();
+        if (left <= 0) {
+            clearInterval(timer);
+            banner.classList.add('is-expired');
+            document.getElementById('demoBannerTitle').textContent = 'Offre expirée';
+            document.getElementById('demoBannerSub').textContent = 'Contactez-nous pour connaître les conditions actuelles.';
+            return false;
+        }
+        const s = Math.floor(left / 1000);
+        [Math.floor(s / 86400), Math.floor((s % 86400) / 3600), Math.floor((s % 3600) / 60), s % 60]
+            .forEach((value, i) => { if (units[i]) units[i].textContent = String(value).padStart(2, '0'); });
+        return true;
+    };
+    if (tick()) timer = setInterval(tick, 1000);
+}
+
+function setupCommuneAutocomplete(form) {
+    const input = form.elements.commune;
+    const list = document.getElementById('communeSuggestions');
+    if (!input || !list) return;
+    let debounce = 0, request = 0, items = [], active = -1;
+    const hide = () => {
+        list.hidden = true; list.innerHTML = ''; items = []; active = -1;
+        input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant');
+    };
+    const fill = (name, value) => {
+        const field = form.elements[name];
+        if (!field || value === '' || value == null) return;
+        field.value = value;
+        field.closest('.field')?.classList.add('is-autofilled');
+    };
+    const choose = commune => {
+        input.value = commune.nom;
+        form.dataset.insee = commune.code || '';
+        fill('code_postal', commune.codesPostaux?.[0] || '');
+        fill('ville', commune.nom);
+        if (typeof commune.population === 'number') fill('population_exacte', commune.population);
+        hide();
+    };
+    const render = communes => {
+        hide();
+        if (!communes.length) return;
+        items = communes;
+        communes.forEach((commune, index) => {
+            const option = document.createElement('li');
+            option.className = 'commune-suggestion';
+            option.id = `communeSuggestion${index}`;
+            option.setAttribute('role', 'option');
+            const name = document.createElement('strong');
+            name.textContent = commune.nom;
+            const meta = document.createElement('span');
+            meta.textContent = [commune.codesPostaux?.[0],
+                typeof commune.population === 'number' ? `${commune.population.toLocaleString('fr-FR')} hab.` : '']
+                .filter(Boolean).join(' · ');
+            option.append(name, meta);
+            option.addEventListener('mousedown', e => { e.preventDefault(); choose(commune); });
+            list.appendChild(option);
+        });
+        list.hidden = false;
+        input.setAttribute('aria-expanded', 'true');
+    };
+    const search = query => {
+        const ticket = ++request;
+        fetch(`https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(query)}`
+            + '&boost=population&limit=8&fields=nom,code,codesPostaux,population')
+            .then(res => { if (!res.ok) throw new Error(`http_${res.status}`); return res.json(); })
+            .then(data => { if (ticket === request) render(Array.isArray(data) ? data : []); })
+            .catch(() => {
+                if (ticket !== request) return;
+                hide();
+                list.innerHTML = '<li class="commune-suggestion-empty">Autocomplétion momentanément indisponible : '
+                    + 'vous pouvez saisir les informations à la main.</li>';
+                list.hidden = false;
+            });
+    };
+    input.addEventListener('input', () => {
+        delete form.dataset.insee;
+        clearTimeout(debounce);
+        const query = input.value.trim();
+        if (query.length < 2) { request++; hide(); return; }
+        debounce = setTimeout(() => search(query), 300);
+    });
+    input.addEventListener('keydown', e => {
+        if (list.hidden || !items.length) return;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            active = e.key === 'ArrowDown' ? Math.min(active + 1, items.length - 1) : Math.max(active - 1, 0);
+            [...list.children].forEach((option, i) => option.classList.toggle('is-active', i === active));
+            input.setAttribute('aria-activedescendant', `communeSuggestion${active}`);
+        } else if (e.key === 'Enter' && active >= 0) {
+            e.preventDefault();
+            choose(items[active]);
+        } else if (e.key === 'Escape') {
+            hide();
+        }
+    });
+    input.addEventListener('blur', () => setTimeout(hide, 120));
+}
+
+function demoRequest(form) {
+    const value = name => String(form.elements[name]?.value || '').trim();
+    return {
+        commune: value('commune'), commune_insee: form.dataset.insee || null,
+        adresse: value('adresse') || null, code_postal: value('code_postal') || null, ville: value('ville') || null,
+        population_exacte: value('population_exacte') ? Number(value('population_exacte')) : null,
+        contact: value('contact'), fonction: value('fonction'), email: value('email'),
+        telephone: value('telephone') || null, besoin: value('besoin'), message: value('message') || null,
+        tag: 'demo_mairie', source: 'landing_page'
+    };
+}
+
 function buildMailto(form) {
-    const data = new FormData(form);
-    const field = name => String(data.get(name) || '').trim();
-    const name = field('name'), email = field('email'), company = field('company'), project = field('project');
+    const d = demoRequest(form);
     const to = form.dataset.email || 'contact@signalo.site';
-    const fr = (document.documentElement.lang || '').startsWith('fr');
-    const subject = fr ? `Demande de projet — ${name}${company ? ` (${company})` : ''}`
-                       : `Project enquiry from ${name}${company ? ` (${company})` : ''}`;
-    const [nameLabel, companyLabel] = fr ? ['Nom', 'Entreprise'] : ['Name', 'Company'];
-    const body = [`${nameLabel} : ${name}`, `E-mail : ${email}`, company ? `${companyLabel} : ${company}` : null, '', project]
-        .filter(line => line !== null).join('\n');
-    return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const subject = `Demande de démo Signalo — ${d.commune || 'mairie'}`;
+    const lines = [
+        ['Commune', d.commune], ['Contact', d.contact], ['Fonction', d.fonction], ['E-mail', d.email],
+        ['Téléphone', d.telephone], ['Adresse de la mairie', d.adresse], ['Code postal', d.code_postal],
+        ['Ville', d.ville], ['Population', d.population_exacte != null ? d.population_exacte.toLocaleString('fr-FR') : null],
+        ['Besoin principal', d.besoin]
+    ].filter(([, v]) => v).map(([label, v]) => `${label} : ${v}`);
+    if (d.message) lines.push('', d.message);
+    return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 function setupContactForm() {
-    const form = document.querySelector('#contact-form');
+    const form = document.getElementById('demoMairieForm');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
+    setupOfferCountdown();
+    setupCommuneAutocomplete(form);
+    const message = document.getElementById('demoMairieMsg');
+    const overlay = document.getElementById('demoConfirmOverlay');
+    const overlayText = document.getElementById('demoConfirmText');
+    const closeButton = document.getElementById('demoConfirmCloseBtn');
+    const button = form.querySelector('button[type="submit"]');
+    const label = button.querySelector('.btn-label');
+    const idleLabel = label.textContent;
+    const confirm = text => {
+        overlayText.textContent = text;
+        overlay.classList.add('is-visible');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeButton.focus();
+    };
+    const close = () => { overlay.classList.remove('is-visible'); overlay.setAttribute('aria-hidden', 'true'); };
+    closeButton.addEventListener('click', close);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    const openMail = () => {
         window.location.href = buildMailto(form);
+        confirm('Votre messagerie s’ouvre avec la demande prête à envoyer : il ne reste qu’à cliquer sur « Envoyer ».');
+    };
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const request = demoRequest(form);
+        if (!request.commune || !request.contact || !request.email || !form.elements.email.checkValidity()) {
+            message.textContent = 'Merci de renseigner la mairie, le contact et un e-mail professionnel valide.';
+            message.className = 'form-msg is-error';
+            return;
+        }
+        message.textContent = '';
+        message.className = 'form-msg';
+        if (!DEMO_ENDPOINT) { openMail(); return; }
+        button.disabled = true;
+        label.textContent = 'Envoi en cours…';
+        try {
+            const response = await fetch(DEMO_ENDPOINT, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...request, offer_deadline: offerDeadline().toISOString() })
+            });
+            if (!response.ok) throw new Error(`http_${response.status}`);
+            form.reset();
+            delete form.dataset.insee;
+            form.querySelectorAll('.is-autofilled').forEach(field => field.classList.remove('is-autofilled'));
+            confirm('Votre demande a été transmise, notre équipe vous recontacte sous 24 h.');
+        } catch (error) {
+            openMail();
+        } finally {
+            button.disabled = false;
+            label.textContent = idleLabel;
+        }
     });
 }
 
@@ -1220,7 +1413,7 @@ window.__glassSite = {
         window.scrollTo(0, stageMaxScroll() + window.innerHeight * value);
         currentContact = targetContact = value;
     },
-    mailto() { const form = document.querySelector('#contact-form'); return form ? buildMailto(form) : null; },
+    mailto() { const form = document.getElementById('demoMairieForm'); return form ? buildMailto(form) : null; },
     get scroll() { return currentScroll; },
     get contact() { return currentContact; },
     get pieces() { return logoPieces.map(p => ({ name: p.name, points: p.correspondence.length })); }
