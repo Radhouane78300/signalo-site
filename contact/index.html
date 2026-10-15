@@ -8,72 +8,84 @@
 <meta name="referrer" content="no-referrer">
 <meta name="signalo-api" content="https://api.redjam-signalo.com">
 <link rel="icon" href="../assets/brand/mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../css/formulaires.css?v=20261016">
+<link rel="stylesheet" href="../css/formulaires.css?v=20261016b">
 </head>
 <body>
-<header class="entete">
-  <div class="entete-int">
-    <a class="marque" href="../" aria-label="Signalo, retour au site"><span class="marque-icone" aria-hidden="true"></span>SIGNALO</a>
-    <nav aria-label="Formulaires">
-      <a class="lien-entete" href="../demonstration/" id="lienDemo">Démonstration</a>
-      <a class="lien-entete" href="./" aria-current="page">Prendre rendez-vous</a>
+<header class="bandeau-site">
+  <div class="bandeau-int">
+    <a class="marque" href="../" aria-label="Signalo, retour au site"><span class="marque-icone" aria-hidden="true"></span>Signalo</a>
+    <nav class="navigation" aria-label="Formulaires">
+      <a href="../demonstration/" id="lienDemo">Démonstration</a>
+      <a href="./" aria-current="page">Prendre rendez-vous</a>
     </nav>
   </div>
 </header>
 
-<main class="page" id="contenu">
-  <div class="intro-bloc">
-    <p class="surtitre">Échanger avec l'équipe</p>
-    <h1>Échangeons sur les besoins de votre commune</h1>
+<main class="mise-en-page" id="contenu">
+  <aside class="invitation" aria-label="Votre rendez-vous">
+    <div class="carte-commune anonyme" id="carteCommune">
+      <p class="pour" id="pourCommune">Signalo pour les collectivités</p>
+      <p class="commune" id="communeNom">Un échange avec l'équipe Signalo</p>
+      <p class="personne" id="personneInvitee" hidden></p>
+    </div>
+    <ul class="engagements">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span id="engagementDuree">Un rendez-vous court, à la date de votre choix.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>À distance ou en présentiel, selon votre préférence.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Le créneau choisi vous est réservé dès la confirmation.</span></li>
+    </ul>
+    <p class="contact-direct">Une question ? <a href="mailto:contact@signalo.site">contact@signalo.site</a></p>
+  </aside>
+
+  <section aria-labelledby="titre">
+    <h1 id="titre">Échangeons sur les besoins de votre commune</h1>
     <p class="intro">Présentez-nous votre besoin et choisissez un créneau pour échanger avec notre équipe.</p>
-  </div>
 
-  <section class="carte" aria-live="polite">
-    <ol class="etapes" id="etapes" aria-label="Étapes">
-      <li id="indicEtape1" aria-current="step">Vos informations et votre demande</li>
-      <li id="indicEtape2">Date et heure</li>
-    </ol>
-
-    <form id="formContact" novalidate>
-      <div class="bandeau bandeau-info" id="bandeauPrerempli" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.7 2.7 5.5-5.4"/></svg>
-        <span>Vos informations professionnelles ont été préremplies à partir de notre invitation. Vérifiez-les et corrigez-les si nécessaire.</span>
+    <div class="carte" aria-live="polite">
+      <div class="progression" id="progression" data-etape="1">
+        <p id="progressionTexte"><strong>Étape 1 sur 2</strong> — Votre demande</p>
+        <div class="barre" aria-hidden="true"><span></span></div>
       </div>
-      <div class="bandeau bandeau-neutre" id="bandeauExpire" hidden>Ce lien personnalisé n'est plus valide : merci de compléter le formulaire.</div>
-      <div class="bandeau bandeau-erreur" id="erreurGenerale" role="alert" hidden></div>
 
-      <!-- ÉTAPE 1 -->
+      <form id="formContact" novalidate>
+        <div class="bandeau bandeau-neutre" id="bandeauExpire" hidden>Ce lien personnalisé n'est plus valide. Merci de compléter le formulaire.</div>
+        <div class="bandeau bandeau-erreur" id="erreurGenerale" role="alert" hidden></div>
+
+        <!-- ÉTAPE 1 -->
       <div id="etape1">
-        <p class="legende">Les champs marqués <em class="obligatoire">*</em> sont obligatoires.</p>
+        <div class="reconnu" id="reconnu" hidden>
+          <div class="reconnu-tete"><p>Vos coordonnées sont déjà renseignées</p><button type="button" class="lien-bouton" id="modifierReconnu">Modifier</button></div>
+          <dl id="reconnuListe"></dl>
+        </div>
+        <p class="note" style="margin:0 0 16px">Tous les champs sont obligatoires.</p>
         <div class="grille">
           <div class="champ large" data-champ="organisation">
-            <label for="organisation">Commune ou organisation <em class="obligatoire">*</em></label>
+            <label for="organisation">Commune ou organisation</label>
             <input id="organisation" name="organisation" type="text" autocomplete="organization" required maxlength="200" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestionsCommune">
             <ul class="suggestions" id="suggestionsCommune" role="listbox" hidden></ul>
             <span class="erreur-champ"></span>
           </div>
           <div class="champ" data-champ="nomComplet">
-            <label for="nomComplet">Nom et prénom <em class="obligatoire">*</em></label>
+            <label for="nomComplet">Nom et prénom</label>
             <input id="nomComplet" name="nomComplet" type="text" autocomplete="name" required maxlength="200">
             <span class="erreur-champ"></span>
           </div>
           <div class="champ" data-champ="fonction">
-            <label for="fonction">Fonction <em class="obligatoire">*</em></label>
+            <label for="fonction">Fonction</label>
             <input id="fonction" name="fonction" type="text" autocomplete="organization-title" required maxlength="150">
             <span class="erreur-champ"></span>
           </div>
           <div class="champ" data-champ="email">
-            <label for="email">Adresse e-mail <em class="obligatoire">*</em></label>
+            <label for="email">Adresse e-mail</label>
             <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="255">
             <span class="erreur-champ"></span>
           </div>
           <div class="champ" data-champ="telephone">
-            <label for="telephone">Téléphone <em class="obligatoire">*</em></label>
+            <label for="telephone">Téléphone</label>
             <input id="telephone" name="telephone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="25">
             <span class="erreur-champ"></span>
           </div>
           <div class="champ large" data-champ="objet">
-            <label for="objet">Objet de la demande <em class="obligatoire">*</em></label>
+            <label for="objet">Objet de la demande</label>
             <select id="objet" name="objet" required>
               <option value="">Choisir…</option>
               <option value="presentation">Présentation de Signalo</option>
@@ -85,13 +97,13 @@
             <span class="erreur-champ"></span>
           </div>
           <div class="champ large" data-champ="message">
-            <label for="message">Message <em class="obligatoire">*</em></label>
+            <label for="message">Message</label>
             <textarea id="message" name="message" maxlength="3000" rows="3" required placeholder="Décrivez brièvement votre besoin."></textarea>
             <span class="erreur-champ"></span>
           </div>
         </div>
         <div class="actions">
-          <p class="note">Étape 1 sur 2</p>
+          <p class="note">Vos informations sont conservées si vous revenez à cette étape.</p>
           <div class="actions-droite"><button type="button" class="bouton" id="continuer">Continuer : choisir un créneau</button></div>
         </div>
       </div>
@@ -109,7 +121,7 @@
                 <button type="button" class="cal-nav" id="moisSuiv" aria-label="Mois suivant">›</button>
               </div>
               <div class="cal-grille" id="calGrille" role="group" aria-label="Jours"></div>
-              <div class="cal-legende"><span>Jour avec des créneaux disponibles</span><span>Jour sans disponibilité</span></div>
+              
             </div>
           </div>
           <div>
@@ -119,7 +131,7 @@
               <span class="erreur-champ"></span>
             </fieldset>
             <fieldset data-champ="modeRencontre" class="bloc-etape">
-              <legend class="groupe-titre">Type de rendez-vous <em class="obligatoire">*</em></legend>
+              <legend class="groupe-titre">Type de rendez-vous</legend>
               <div class="modes">
                 <label class="choix"><input type="radio" name="modeRencontre" value="distance"><span>À distance</span></label>
                 <label class="choix"><input type="radio" name="modeRencontre" value="presentiel"><span>En présentiel</span></label>
@@ -139,7 +151,7 @@
           </dl>
         </div>
         <div class="champ" data-champ="confidentialite" style="margin-top:18px">
-          <label class="case"><input type="checkbox" name="confidentialite" required> <span>J'ai lu la <a href="https://signalo-page.vercel.app/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a> : mes coordonnées sont utilisées pour traiter ma demande et organiser le rendez-vous. <em class="obligatoire">*</em></span></label>
+          <label class="case"><input type="checkbox" name="confidentialite" required> <span>J'ai lu la <a href="https://signalo-page.vercel.app/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a>. Mes coordonnées servent uniquement à traiter ma demande et à organiser le rendez-vous.</span></label>
           <span class="erreur-champ"></span>
         </div>
         <div class="piege" aria-hidden="true"><label for="site">Ne pas remplir</label><input id="site" name="site" type="text" tabindex="-1" autocomplete="off"></div>
@@ -151,11 +163,11 @@
     </form>
 
     <div class="succes" id="succes" hidden tabindex="-1">
-      <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34"/><path d="M24 41l11 11 21-23"/></svg>
       <h2 id="succesTitre">Demande enregistrée</h2>
       <p id="succesTexte"></p>
       <div class="recap"><dl id="succesRecap"></dl></div>
-      <p><a class="bouton bouton-secondaire" href="../">Retour au site</a></p>
+      <p style="margin-top:20px"><a class="bouton bouton-secondaire" href="../">Retour au site Signalo</a></p>
+    </div>
     </div>
   </section>
 </main>
@@ -166,7 +178,7 @@
 </footer>
 
 <script type="module">
-import { ErreurEnvoi, afficherErreursChamps, appliquerPreremplissage, autocompletionCommune, chargerAgenda, chargerPreremplissage, controlerChamps, effacerErreursChamps, envoyerContact, lireRef, nouvelleCle, regles } from '../js/demandes.js?v=20261016';
+import { ErreurEnvoi, afficherErreursChamps, appliquerPreremplissage, autocompletionCommune, chargerAgenda, chargerPreremplissage, controlerChamps, effacerErreursChamps, envoyerContact, lireRef, montrerInvitation, nouvelleCle, regles } from '../js/demandes.js?v=20261016b';
 
 const form = document.getElementById('formContact');
 const erreur = document.getElementById('erreurGenerale');
@@ -183,9 +195,9 @@ if (ref) document.getElementById('lienDemo').href = `../demonstration/?ref=${ref
 autocompletionCommune(form.elements.organisation, document.getElementById('suggestionsCommune'), (c) => { codeInsee = c?.code || null; });
 chargerPreremplissage(ref).then(({ etat, donnees }) => {
     if (etat === 'ok') {
-        const n = appliquerPreremplissage(form, donnees, { organisation: 'organisation', nomComplet: 'nomComplet', fonction: 'fonction', email: 'email', telephone: 'telephone' });
+        const remplis = appliquerPreremplissage(form, donnees, { organisation: 'organisation', nomComplet: 'nomComplet', fonction: 'fonction', email: 'email', telephone: 'telephone' });
         if (donnees.codeInsee && form.elements.organisation.value === donnees.organisation) codeInsee = donnees.codeInsee;
-        document.getElementById('bandeauPrerempli').hidden = n === 0;
+        montrerInvitation(form, remplis);
     } else if (etat === 'invalide') {
         document.getElementById('bandeauExpire').hidden = false;
     }
@@ -201,13 +213,10 @@ const libMode = (m) => (m === 'presentiel' ? 'En présentiel' : m === 'distance'
 function allerEtape(n) {
     document.getElementById('etape1').hidden = n !== 1;
     document.getElementById('etape2').hidden = n !== 2;
-    const e1 = document.getElementById('indicEtape1');
-    const e2 = document.getElementById('indicEtape2');
-    e1.toggleAttribute('aria-current', n === 1); if (n === 1) e1.setAttribute('aria-current', 'step');
-    e2.toggleAttribute('aria-current', n === 2); if (n === 2) e2.setAttribute('aria-current', 'step');
-    e1.classList.toggle('faite', n === 2);
+    document.getElementById('progression').dataset.etape = String(n);
+    document.getElementById('progressionTexte').innerHTML = n === 1 ? '<strong>Étape 1 sur 2</strong> — Votre demande' : '<strong>Étape 2 sur 2</strong> — Date et heure du rendez-vous';
     montrerErreur('');
-    document.getElementById('etapes').scrollIntoView({ block: 'start', behavior: 'smooth' });
+    document.getElementById('progression').scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
 const reglesEtape1 = {
     organisation: regles.obligatoire('Le nom de la commune ou de l\'organisation'),
@@ -302,6 +311,7 @@ async function chargerCreneaux(conserver = null) {
     }
     bouton.disabled = false;
     fz.textContent = `Rendez-vous de ${agenda.dureeMinutes} minutes. Horaires affichés en ${nomFuseau(agenda.fuseau)}.`;
+    document.getElementById('engagementDuree').textContent = `Un échange de ${agenda.dureeMinutes} minutes avec l'équipe Signalo.`;
     if (!agenda.jours.length) {
         // Jamais de créneau inventé : sans disponibilité, la demande est envoyée sans rendez-vous.
         info.textContent = agenda.configure
@@ -366,7 +376,7 @@ form.addEventListener('submit', async (e) => {
             pageOrigine: `${location.origin}${location.pathname}`, site: form.elements.site.value,
         });
         form.hidden = true;
-        document.getElementById('etapes').hidden = true;
+        document.getElementById('progression').hidden = true;
         const dl = document.getElementById('succesRecap');
         const lignes = [['Commune', r.organisation || v('organisation')]];
         if (r.rendezVous) {

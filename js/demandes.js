@@ -55,6 +55,11 @@ export const chargerAgenda = () => appel('/demandes-commerciales/agenda');
 // Erreurs affichées près des champs concernés (attribut data-champ sur le conteneur).
 export function afficherErreursChamps(form, champs) {
     effacerErreursChamps(form);
+    // Erreur sur une coordonnée résumée (masquée) : tous les champs sont rouverts pour correction.
+    if (Object.keys(champs || {}).some((nom) => form.querySelector(`[data-champ="${nom}"]`)?.hasAttribute('hidden'))) {
+        form.querySelectorAll('[data-champ][hidden]').forEach((z) => z.removeAttribute('hidden'));
+        document.getElementById('reconnu')?.setAttribute('hidden', '');
+    }
     let premier = null;
     for (const [nom, message] of Object.entries(champs || {})) {
         const zone = form.querySelector(`[data-champ="${nom}"]`);
@@ -178,17 +183,56 @@ export async function chargerPreremplissage(ref) {
     }
 }
 
-// Remplit uniquement les champs encore vides ; chaque valeur reste modifiable.
+// Remplit uniquement les champs encore vides ; renvoie les champs remplis (chacun reste modifiable).
 export function appliquerPreremplissage(form, donnees, correspondance) {
-    let n = 0;
+    const remplis = [];
     for (const [champ, cle] of Object.entries(correspondance)) {
         const el = form.elements[champ];
         const valeur = donnees?.[cle];
         if (!el || !valeur || String(el.value || '').trim()) continue;
         el.value = valeur;
-        el.closest('.champ')?.classList.add('prerempli');
-        el.addEventListener('input', () => el.closest('.champ')?.classList.remove('prerempli'), { once: true });
-        n++;
+        remplis.push(champ);
     }
-    return n;
+    return remplis;
+}
+
+const LIBELLES = { organisation: 'Commune', nomComplet: 'Nom et prénom', fonction: 'Fonction', email: 'E-mail', telephone: 'Téléphone' };
+
+/**
+ * Invitation reconnue (lien de l'e-mail) : la carte de gauche affiche la commune et la
+ * personne invitée ; dans le formulaire, les coordonnées connues sont résumées et seuls
+ * les champs manquants restent à saisir. « Modifier » rouvre tous les champs.
+ */
+export function montrerInvitation(form, remplis) {
+    const v = (n) => String(form.elements[n]?.value || '').trim();
+    const carte = document.getElementById('carteCommune');
+    if (carte && v('organisation')) {
+        carte.classList.remove('anonyme');
+        document.getElementById('pourCommune').textContent = 'Demande préparée pour la commune de';
+        document.getElementById('communeNom').textContent = v('organisation');
+        const personne = document.getElementById('personneInvitee');
+        if (v('nomComplet')) {
+            personne.textContent = '';
+            const b = document.createElement('strong');
+            b.textContent = v('nomComplet');
+            personne.append(b, document.createTextNode(v('fonction') ? `, ${v('fonction')}` : ''));
+            personne.hidden = false;
+        }
+    }
+    const resume = document.getElementById('reconnu');
+    if (!resume || !remplis.length) return;
+    const dl = document.getElementById('reconnuListe');
+    dl.textContent = '';
+    for (const champ of remplis) {
+        const dt = document.createElement('dt'); dt.textContent = LIBELLES[champ] || champ;
+        const dd = document.createElement('dd'); dd.textContent = v(champ);
+        dl.append(dt, dd);
+        form.querySelector(`[data-champ="${champ}"]`)?.setAttribute('hidden', '');
+    }
+    resume.hidden = false;
+    document.getElementById('modifierReconnu').addEventListener('click', () => {
+        for (const champ of remplis) form.querySelector(`[data-champ="${champ}"]`)?.removeAttribute('hidden');
+        resume.hidden = true;
+        form.elements[remplis[0]]?.focus();
+    }, { once: true });
 }
