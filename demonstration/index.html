@@ -2,37 +2,46 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Demander une démonstration — Signalo</title>
-<meta name="description" content="Demandez une démonstration personnalisée de Signalo pour votre commune.">
+<meta name="description" content="Découvrez Signalo pour votre commune : demandez une démonstration personnalisée.">
+<meta name="referrer" content="no-referrer">
 <meta name="signalo-api" content="https://api.redjam-signalo.com">
 <link rel="icon" href="../assets/brand/mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../css/formulaires.css?v=20261015">
+<link rel="stylesheet" href="../css/formulaires.css?v=20261016">
 </head>
 <body>
 <header class="entete">
-  <a class="marque" href="../" aria-label="Signalo, retour au site"><span class="marque-icone" aria-hidden="true"></span>SIGNALO</a>
-  <nav aria-label="Formulaires">
-    <a class="lien-entete" href="./" aria-current="page">Démonstration</a>
-    <a class="lien-entete" href="../contact/">Contact et rendez-vous</a>
-  </nav>
+  <div class="entete-int">
+    <a class="marque" href="../" aria-label="Signalo, retour au site"><span class="marque-icone" aria-hidden="true"></span>SIGNALO</a>
+    <nav aria-label="Formulaires">
+      <a class="lien-entete" href="./" aria-current="page">Démonstration</a>
+      <a class="lien-entete" href="../contact/" id="lienContact">Prendre rendez-vous</a>
+    </nav>
+  </div>
 </header>
 
 <main class="page" id="contenu">
-  <p class="surtitre">Signalo Mairie</p>
-  <h1>Découvrez Signalo pour votre commune</h1>
-  <p class="intro">Demandez une démonstration personnalisée et découvrez comment Signalo simplifie les signalements citoyens et facilite leur suivi par les services municipaux.</p>
+  <div class="intro-bloc">
+    <p class="surtitre">Signalo Mairie</p>
+    <h1>Découvrez Signalo pour votre commune</h1>
+    <p class="intro">Découvrez comment Signalo simplifie les signalements citoyens et facilite leur suivi par les services municipaux.</p>
+  </div>
 
   <section class="carte" aria-live="polite">
     <form id="formDemo" novalidate>
+      <div class="bandeau bandeau-info" id="bandeauPrerempli" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.7 2.7 5.5-5.4"/></svg>
+        <span>Vos informations professionnelles ont été préremplies à partir de notre invitation. Vérifiez-les et corrigez-les si nécessaire.</span>
+      </div>
+      <div class="bandeau bandeau-neutre" id="bandeauExpire" hidden>Ce lien personnalisé n'est plus valide : merci de compléter le formulaire.</div>
+      <div class="bandeau bandeau-erreur" id="erreurGenerale" role="alert" hidden></div>
       <p class="legende">Les champs marqués <em class="obligatoire">*</em> sont obligatoires.</p>
-      <div class="alerte alerte-erreur" id="erreurGenerale" role="alert" hidden></div>
       <div class="grille">
         <div class="champ large" data-champ="organisation">
-          <label for="organisation">Nom de la commune <em class="obligatoire">*</em></label>
-          <input id="organisation" name="organisation" type="text" autocomplete="off" required maxlength="200" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestionsCommune" aria-describedby="aideCommune">
+          <label for="organisation">Commune <em class="obligatoire">*</em></label>
+          <input id="organisation" name="organisation" type="text" autocomplete="off" required maxlength="200" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestionsCommune" placeholder="Commencez à taper le nom de votre commune">
           <ul class="suggestions" id="suggestionsCommune" role="listbox" hidden></ul>
-          <span class="aide" id="aideCommune">Commencez à taper : les communes françaises sont proposées.</span>
           <span class="erreur-champ"></span>
         </div>
         <div class="champ" data-champ="nomComplet">
@@ -42,34 +51,33 @@
         </div>
         <div class="champ" data-champ="fonction">
           <label for="fonction">Fonction <em class="obligatoire">*</em></label>
-          <input id="fonction" name="fonction" type="text" autocomplete="organization-title" required maxlength="150" placeholder="Ex. Maire, DGS, directeur des services techniques">
+          <input id="fonction" name="fonction" type="text" autocomplete="organization-title" required maxlength="150" placeholder="Maire, DGS, directeur des services techniques…">
           <span class="erreur-champ"></span>
         </div>
         <div class="champ" data-champ="email">
           <label for="email">Adresse e-mail professionnelle <em class="obligatoire">*</em></label>
-          <input id="email" name="email" type="email" autocomplete="email" required maxlength="255" placeholder="prenom.nom@mairie.fr">
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="255" placeholder="prenom.nom@mairie.fr">
           <span class="erreur-champ"></span>
         </div>
         <div class="champ" data-champ="telephone">
           <label for="telephone">Téléphone professionnel <em class="obligatoire">*</em></label>
-          <input id="telephone" name="telephone" type="tel" autocomplete="tel" required maxlength="25" placeholder="Ex. 01 23 45 67 89">
+          <input id="telephone" name="telephone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="25" placeholder="01 23 45 67 89">
           <span class="erreur-champ"></span>
         </div>
         <div class="champ large" data-champ="message">
-          <label for="message">Message ou besoin particulier <span class="aide">(facultatif)</span></label>
-          <textarea id="message" name="message" maxlength="3000" rows="5"></textarea>
+          <label for="message">Message <span class="aide">(facultatif)</span></label>
+          <textarea id="message" name="message" maxlength="3000" rows="3" placeholder="Vos besoins, vos questions, le nombre d'habitants…"></textarea>
           <span class="erreur-champ"></span>
         </div>
         <div class="champ large" data-champ="confidentialite">
-          <label class="case"><input type="checkbox" name="confidentialite" required> <span>J'ai lu la <a href="https://signalo-page.vercel.app/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a> <em class="obligatoire">*</em></span></label>
-          <span class="aide">Vos coordonnées servent à traiter votre demande de démonstration. Aucun consentement à la prospection n'est demandé.</span>
+          <label class="case"><input type="checkbox" name="confidentialite" required> <span>J'ai lu la <a href="https://signalo-page.vercel.app/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a> : mes coordonnées sont utilisées pour traiter ma demande de démonstration. <em class="obligatoire">*</em></span></label>
           <span class="erreur-champ"></span>
         </div>
         <div class="piege" aria-hidden="true"><label for="site">Ne pas remplir</label><input id="site" name="site" type="text" tabindex="-1" autocomplete="off"></div>
       </div>
       <div class="actions">
         <p class="note">Gratuit et sans engagement.</p>
-        <button type="submit" class="bouton" id="envoyer">Envoyer ma demande de démonstration</button>
+        <button type="submit" class="bouton" id="envoyer">Demander ma démonstration</button>
       </div>
     </form>
 
@@ -77,7 +85,7 @@
       <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34"/><path d="M24 41l11 11 21-23"/></svg>
       <h2>Demande enregistrée</h2>
       <p>Merci pour votre intérêt pour Signalo. Votre demande de démonstration a bien été enregistrée. Notre équipe reviendra vers vous pour organiser la présentation.</p>
-      <p class="note" id="reference"></p>
+      <div class="recap"><dl><dt>Commune</dt><dd id="succesCommune"></dd><dt>Référence</dt><dd id="reference"></dd></dl></div>
       <p><a class="bouton bouton-secondaire" href="../">Retour au site</a></p>
     </div>
   </section>
@@ -89,16 +97,29 @@
 </footer>
 
 <script type="module">
-import { ErreurEnvoi, afficherErreursChamps, autocompletionCommune, controlerChamps, effacerErreursChamps, envoyerDemonstration, nouvelleCle, regles } from '../js/demandes.js?v=20261015';
+import { ErreurEnvoi, afficherErreursChamps, appliquerPreremplissage, autocompletionCommune, chargerPreremplissage, controlerChamps, effacerErreursChamps, envoyerDemonstration, lireRef, nouvelleCle, regles } from '../js/demandes.js?v=20261016';
 
 const form = document.getElementById('formDemo');
 const bouton = document.getElementById('envoyer');
 const erreur = document.getElementById('erreurGenerale');
+const ref = lireRef();
 let codeInsee = null;
 let cle = nouvelleCle();
 let enCours = false;
 
+// Le lien « Prendre rendez-vous » conserve le jeton personnel (même destinataire).
+if (ref) document.getElementById('lienContact').href = `../contact/?ref=${ref}`;
 autocompletionCommune(form.elements.organisation, document.getElementById('suggestionsCommune'), (c) => { codeInsee = c?.code || null; });
+
+chargerPreremplissage(ref).then(({ etat, donnees }) => {
+    if (etat === 'ok') {
+        const n = appliquerPreremplissage(form, donnees, { organisation: 'organisation', nomComplet: 'nomComplet', fonction: 'fonction', email: 'email', telephone: 'telephone' });
+        if (donnees.codeInsee && form.elements.organisation.value === donnees.organisation) codeInsee = donnees.codeInsee;
+        document.getElementById('bandeauPrerempli').hidden = n === 0;
+    } else if (etat === 'invalide') {
+        document.getElementById('bandeauExpire').hidden = false;
+    }
+});
 
 const montrerErreur = (texte) => { erreur.textContent = texte; erreur.hidden = !texte; };
 
@@ -124,12 +145,13 @@ form.addEventListener('submit', async (e) => {
         const r = await envoyerDemonstration({
             organisation: v('organisation'), codeInsee, nomComplet: v('nomComplet'), fonction: v('fonction'),
             email: v('email'), telephone: v('telephone'), message: v('message') || null,
-            confidentialite: form.elements.confidentialite.checked, cleSoumission: cle,
-            pageOrigine: location.href.split('#')[0], site: form.elements.site.value,
+            confidentialite: form.elements.confidentialite.checked, cleSoumission: cle, ref,
+            pageOrigine: `${location.origin}${location.pathname}`, site: form.elements.site.value,
         });
         // Confirmation affichée UNIQUEMENT après l'enregistrement confirmé par le serveur.
         form.hidden = true;
-        document.getElementById('reference').textContent = `Référence de votre demande : ${r.reference}`;
+        document.getElementById('succesCommune').textContent = r.organisation || v('organisation');
+        document.getElementById('reference').textContent = r.reference;
         const ok = document.getElementById('succes');
         ok.hidden = false;
         ok.focus();
@@ -142,7 +164,7 @@ form.addEventListener('submit', async (e) => {
     } finally {
         enCours = false;
         bouton.disabled = false;
-        bouton.textContent = 'Envoyer ma demande de démonstration';
+        bouton.textContent = 'Demander ma démonstration';
     }
 });
 </script>

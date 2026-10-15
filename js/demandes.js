@@ -159,3 +159,36 @@ export function autocompletionCommune(input, liste, surChoix) {
     });
     input.addEventListener('blur', () => setTimeout(masquer, 120));
 }
+
+// ---- Liens personnalisés des e-mails (?ref=…) ----------------------------------------
+// Le jeton, opaque, permet seulement de récupérer les champs du formulaire du destinataire
+// de l'e-mail (commune, nom, fonction, e-mail, téléphone). Absent, expiré ou invalide :
+// le formulaire reste vierge. Aucune donnée personnelle dans l'adresse de la page.
+export function lireRef() {
+    const ref = new URLSearchParams(location.search).get('ref') || '';
+    return /^[A-Za-z0-9_-]{32}$/.test(ref) ? ref : null;
+}
+
+export async function chargerPreremplissage(ref) {
+    if (!ref) return { etat: 'absent', donnees: null };
+    try {
+        return { etat: 'ok', donnees: await appel(`/demandes-commerciales/preremplissage?ref=${encodeURIComponent(ref)}`) };
+    } catch (e) {
+        return { etat: e.statut === 404 ? 'invalide' : 'indisponible', donnees: null };
+    }
+}
+
+// Remplit uniquement les champs encore vides ; chaque valeur reste modifiable.
+export function appliquerPreremplissage(form, donnees, correspondance) {
+    let n = 0;
+    for (const [champ, cle] of Object.entries(correspondance)) {
+        const el = form.elements[champ];
+        const valeur = donnees?.[cle];
+        if (!el || !valeur || String(el.value || '').trim()) continue;
+        el.value = valeur;
+        el.closest('.champ')?.classList.add('prerempli');
+        el.addEventListener('input', () => el.closest('.champ')?.classList.remove('prerempli'), { once: true });
+        n++;
+    }
+    return n;
+}
