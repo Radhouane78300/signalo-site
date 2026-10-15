@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact et prise de rendez-vous — Signalo</title>
+<meta name="description" content="Contactez l'équipe Signalo et choisissez un créneau de rendez-vous disponible.">
+<meta name="signalo-api" content="https://api.redjam-signalo.com">
+<link rel="icon" href="../assets/brand/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/formulaires.css?v=20261015">
+</head>
+<body>
+<header class="entete">
+  <a class="marque" href="../" aria-label="Signalo, retour au site"><span class="marque-icone" aria-hidden="true"></span>SIGNALO</a>
+  <nav aria-label="Formulaires">
+    <a class="lien-entete" href="../demonstration/">Démonstration</a>
+    <a class="lien-entete" href="./" aria-current="page">Contact et rendez-vous</a>
+  </nav>
+</header>
+
+<main class="page" id="contenu">
+  <p class="surtitre">Échanger avec l'équipe</p>
+  <h1>Contact et prise de rendez-vous</h1>
+  <p class="intro">Vous souhaitez échanger avec notre équipe au sujet de Signalo ? Décrivez brièvement votre demande et choisissez un créneau disponible.</p>
+
+  <section class="carte" aria-live="polite">
+    <form id="formContact" novalidate>
+      <p class="legende">Les champs marqués <em class="obligatoire">*</em> sont obligatoires.</p>
+      <div class="alerte alerte-erreur" id="erreurGenerale" role="alert" hidden></div>
+      <div class="grille">
+        <div class="champ large" data-champ="organisation">
+          <label for="organisation">Nom de la commune ou de l'organisation <em class="obligatoire">*</em></label>
+          <input id="organisation" name="organisation" type="text" autocomplete="organization" required maxlength="200" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestionsCommune">
+          <ul class="suggestions" id="suggestionsCommune" role="listbox" hidden></ul>
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="champ" data-champ="nomComplet">
+          <label for="nomComplet">Nom et prénom <em class="obligatoire">*</em></label>
+          <input id="nomComplet" name="nomComplet" type="text" autocomplete="name" required maxlength="200">
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="champ" data-champ="fonction">
+          <label for="fonction">Fonction <em class="obligatoire">*</em></label>
+          <input id="fonction" name="fonction" type="text" autocomplete="organization-title" required maxlength="150">
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="champ" data-champ="email">
+          <label for="email">Adresse e-mail <em class="obligatoire">*</em></label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="255">
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="champ" data-champ="telephone">
+          <label for="telephone">Téléphone <em class="obligatoire">*</em></label>
+          <input id="telephone" name="telephone" type="tel" autocomplete="tel" required maxlength="25">
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="champ large" data-champ="objet">
+          <label for="objet">Objet de la demande <em class="obligatoire">*</em></label>
+          <select id="objet" name="objet" required>
+            <option value="">Choisir…</option>
+            <option value="presentation">Présentation de Signalo</option>
+            <option value="commercial">Informations commerciales</option>
+            <option value="partenariat">Partenariat</option>
+            <option value="technique">Question technique</option>
+            <option value="autre">Autre demande</option>
+          </select>
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="champ large" data-champ="message">
+          <label for="message">Message <em class="obligatoire">*</em></label>
+          <textarea id="message" name="message" maxlength="3000" rows="5" required></textarea>
+          <span class="erreur-champ"></span>
+        </div>
+      </div>
+
+      <div class="agenda" id="agenda">
+        <h2>Choisissez un créneau</h2>
+        <p class="fuseau" id="fuseau">Chargement des créneaux disponibles…</p>
+        <div class="alerte alerte-info" id="agendaInfo" hidden></div>
+        <div id="agendaChoix" hidden>
+          <fieldset data-champ="jour">
+            <legend class="groupe-titre">Jour</legend>
+            <div class="jours" id="jours"></div>
+          </fieldset>
+          <fieldset class="etape" data-champ="creneau" id="zoneHeures" hidden>
+            <legend class="groupe-titre">Horaire disponible</legend>
+            <div class="heures" id="heures"></div>
+            <span class="erreur-champ"></span>
+          </fieldset>
+          <fieldset class="etape" data-champ="modeRencontre">
+            <legend class="groupe-titre">Type de rendez-vous <em class="obligatoire">*</em></legend>
+            <div class="modes">
+              <label class="choix"><input type="radio" name="modeRencontre" value="distance"><span>À distance (visio ou téléphone)</span></label>
+              <label class="choix"><input type="radio" name="modeRencontre" value="presentiel"><span>En présentiel</span></label>
+            </div>
+            <span class="erreur-champ"></span>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="grille" style="margin-top:24px">
+        <div class="champ large" data-champ="confidentialite">
+          <label class="case"><input type="checkbox" name="confidentialite" required> <span>J'ai lu la <a href="https://signalo-page.vercel.app/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a> <em class="obligatoire">*</em></span></label>
+          <span class="erreur-champ"></span>
+        </div>
+        <div class="piege" aria-hidden="true"><label for="site">Ne pas remplir</label><input id="site" name="site" type="text" tabindex="-1" autocomplete="off"></div>
+      </div>
+      <div class="actions">
+        <p class="note" id="noteEnvoi">Votre créneau est vérifié à nouveau au moment de l'envoi.</p>
+        <button type="submit" class="bouton" id="envoyer">Confirmer ma demande</button>
+      </div>
+    </form>
+
+    <div class="succes" id="succes" hidden tabindex="-1">
+      <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34"/><path d="M24 41l11 11 21-23"/></svg>
+      <h2 id="succesTitre">Demande enregistrée</h2>
+      <div id="succesRdv"></div>
+      <p id="succesTexte"></p>
+      <p class="note" id="reference"></p>
+      <p><a class="bouton bouton-secondaire" href="../">Retour au site</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <span>&copy; 2026 — SIGNALO · Votre ville, votre voix</span>
+  <span><a href="https://signalo-page.vercel.app/privacy.html">Confidentialité</a> · <a href="https://signalo-page.vercel.app/mentions-legales.html">Mentions légales</a> · <a href="mailto:contact@signalo.site">contact@signalo.site</a></span>
+</footer>
+
+<script type="module">
+import { ErreurEnvoi, afficherErreursChamps, autocompletionCommune, chargerAgenda, controlerChamps, effacerErreursChamps, envoyerContact, nouvelleCle, regles } from '../js/demandes.js?v=20261015';
+
+const form = document.getElementById('formContact');
+const bouton = document.getElementById('envoyer');
+const erreur = document.getElementById('erreurGenerale');
+const info = document.getElementById('agendaInfo');
+let codeInsee = null;
+let cle = nouvelleCle();
+let enCours = false;
+let agenda = null;   // null : agenda non chargé ; { jours: [] } : aucun créneau
+let fuseau = 'Europe/Paris';
+
+autocompletionCommune(form.elements.organisation, document.getElementById('suggestionsCommune'), (c) => { codeInsee = c?.code || null; });
+const montrerErreur = (texte) => { erreur.textContent = texte; erreur.hidden = !texte; };
+
+const libelleJour = (date) => {
+    const d = new Date(`${date}T12:00:00Z`);
+    return {
+        jour: d.toLocaleDateString('fr-FR', { weekday: 'short', timeZone: 'UTC' }).replace('.', ''),
+        date: d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' }).replace('.', ''),
+        complet: d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
+    };
+};
+const nomFuseau = (tz) => (tz === 'Europe/Paris' ? 'heure de Paris (France métropolitaine)' : tz);
+
+function afficherHeures(date, conserver) {
+    const zone = document.getElementById('heures');
+    zone.innerHTML = '';
+    const jour = agenda.jours.find((j) => j.date === date);
+    for (const c of jour?.creneaux ?? []) {
+        const l = document.createElement('label');
+        l.className = 'choix';
+        l.innerHTML = `<input type="radio" name="creneau" value="${c.debut}"><span>${c.heure}</span>`;
+        l.querySelector('input').setAttribute('aria-label', `${libelleJour(date).complet} à ${c.heure}`);
+        if (conserver === c.debut) l.querySelector('input').checked = true;
+        zone.appendChild(l);
+    }
+    document.getElementById('zoneHeures').hidden = false;
+}
+
+async function chargerCreneaux(conserver = null) {
+    const fz = document.getElementById('fuseau');
+    try {
+        agenda = await chargerAgenda();
+    } catch (e) {
+        agenda = null;
+        fz.textContent = '';
+        info.textContent = `${e.message} L'agenda ne peut pas être affiché pour le moment.`;
+        info.hidden = false;
+        document.getElementById('agendaChoix').hidden = true;
+        return;
+    }
+    fuseau = agenda.fuseau;
+    fz.textContent = `Rendez-vous de ${agenda.dureeMinutes} minutes. Horaires affichés en ${nomFuseau(agenda.fuseau)}.`;
+    if (!agenda.jours.length) {
+        // Jamais de créneau inventé : sans disponibilité configurée, la demande part sans rendez-vous.
+        info.textContent = agenda.configure
+            ? 'Aucun créneau n\'est disponible pour le moment. Envoyez votre demande : notre équipe vous proposera un rendez-vous.'
+            : 'La prise de rendez-vous en ligne n\'est pas encore ouverte. Envoyez votre demande : notre équipe vous proposera un rendez-vous.';
+        info.hidden = false;
+        document.getElementById('agendaChoix').hidden = true;
+        return;
+    }
+    info.hidden = true;
+    document.getElementById('agendaChoix').hidden = false;
+    const jours = document.getElementById('jours');
+    jours.innerHTML = '';
+    const jourConserve = conserver ? agenda.jours.find((j) => j.creneaux.some((c) => c.debut === conserver))?.date : null;
+    for (const j of agenda.jours) {
+        const lib = libelleJour(j.date);
+        const l = document.createElement('label');
+        l.className = 'choix';
+        l.innerHTML = `<input type="radio" name="jour" value="${j.date}"><span>${lib.jour}<small>${lib.date}</small></span>`;
+        l.querySelector('input').setAttribute('aria-label', `${lib.complet}, ${j.creneaux.length} créneau${j.creneaux.length > 1 ? 'x' : ''}`);
+        l.querySelector('input').addEventListener('change', () => afficherHeures(j.date, null));
+        if (j.date === jourConserve) l.querySelector('input').checked = true;
+        jours.appendChild(l);
+    }
+    if (jourConserve) afficherHeures(jourConserve, conserver);
+    else document.getElementById('zoneHeures').hidden = true;
+}
+chargerCreneaux();
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (enCours) return;
+    montrerErreur('');
+    const avecAgenda = Boolean(agenda?.jours.length);
+    const choisi = form.querySelector('input[name="creneau"]:checked')?.value || null;
+    const mode = form.querySelector('input[name="modeRencontre"]:checked')?.value || null;
+    const champs = controlerChamps(form, {
+        organisation: regles.obligatoire('Le nom de la commune ou de l\'organisation'),
+        nomComplet: regles.obligatoire('Le nom et prénom'),
+        fonction: regles.obligatoire('La fonction'),
+        email: regles.email,
+        telephone: regles.telephone,
+        objet: (v) => (v ? null : 'Choisissez l\'objet de votre demande.'),
+        message: (v) => (v.length >= 5 ? null : 'Le message est obligatoire (5 caractères minimum).'),
+        confidentialite: regles.confidentialite,
+    });
+    if (avecAgenda && !choisi) champs.creneau = 'Choisissez un jour puis un horaire.';
+    if (avecAgenda && !mode) champs.modeRencontre = 'Indiquez si vous préférez une rencontre à distance ou en présentiel.';
+    if (afficherErreursChamps(form, champs)) { montrerErreur('Certains champs sont à compléter ou à corriger.'); return; }
+    effacerErreursChamps(form);
+    enCours = true;
+    bouton.disabled = true;
+    bouton.textContent = 'Envoi en cours…';
+    const v = (n) => form.elements[n].value.trim();
+    try {
+        const r = await envoyerContact({
+            organisation: v('organisation'), codeInsee, nomComplet: v('nomComplet'), fonction: v('fonction'),
+            email: v('email'), telephone: v('telephone'), objet: v('objet'), message: v('message'),
+            creneau: choisi, modeRencontre: choisi ? mode : null,
+            confidentialite: form.elements.confidentialite.checked, cleSoumission: cle,
+            pageOrigine: location.href.split('#')[0], site: form.elements.site.value,
+        });
+        form.hidden = true;
+        const rdv = document.getElementById('succesRdv');
+        if (r.rendezVous) {
+            document.getElementById('succesTitre').textContent = 'Votre demande de rendez-vous est enregistrée';
+            const recap = document.createElement('div');
+            recap.className = 'recap';
+            const lignes = [
+                ['Date', r.rendezVous.date],
+                ['Heure', `${r.rendezVous.heure} (${nomFuseau(r.rendezVous.fuseau)})`],
+                ['Durée', `${r.rendezVous.dureeMinutes} minutes`],
+                ['Type', r.rendezVous.modeRencontre === 'presentiel' ? 'Rencontre en présentiel' : 'Rencontre à distance'],
+            ];
+            for (const [k, val] of lignes) { const p = document.createElement('p'); const b = document.createElement('strong'); b.textContent = `${k} : `; p.append(b, document.createTextNode(val)); recap.appendChild(p); }
+            rdv.appendChild(recap);
+            // Jamais « e-mail envoyé » si l'envoi n'a pas réellement réussi.
+            document.getElementById('succesTexte').textContent = r.emailConfirmation === 'envoye'
+                ? `Un e-mail de confirmation vous a été envoyé à ${v('email')}. Notre équipe reviendra vers vous pour confirmer les modalités.`
+                : 'Le créneau vous est réservé. Notre équipe reviendra vers vous pour confirmer les modalités.';
+        } else {
+            document.getElementById('succesTexte').textContent = 'Merci, votre demande a bien été enregistrée. Notre équipe reviendra vers vous rapidement.';
+        }
+        document.getElementById('reference').textContent = `Référence de votre demande : ${r.reference}`;
+        const ok = document.getElementById('succes');
+        ok.hidden = false;
+        ok.focus();
+        cle = nouvelleCle();
+    } catch (err) {
+        if (err instanceof ErreurEnvoi && err.code === 'CRENEAU_INDISPONIBLE') {
+            // Créneau pris entre-temps : agenda rechargé, le visiteur en choisit un autre (sa saisie est conservée).
+            await chargerCreneaux();
+            afficherErreursChamps(form, { creneau: 'Ce créneau vient d\'être réservé. Choisissez-en un autre.' });
+            document.getElementById('zoneHeures').hidden = false;
+        } else if (err instanceof ErreurEnvoi && err.champs) {
+            afficherErreursChamps(form, err.champs);
+        }
+        montrerErreur(err.message || 'La demande n\'a pas pu être enregistrée. Merci de réessayer.');
+        erreur.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    } finally {
+        enCours = false;
+        bouton.disabled = false;
+        bouton.textContent = 'Confirmer ma demande';
+    }
+});
+</script>
+</body>
+</html>

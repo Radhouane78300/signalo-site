@@ -850,3 +850,15 @@ body.contact-open .main-header::before {
     .cta-split { grid-template-columns: minmax(0, 1fr); }
     .cta-art { order: -1; justify-self: center; width: 128px; }
 }
+
+/* Accès directs aux formulaires (pages /demonstration/ et /contact/) et erreurs par champ */
+.cta-liens { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.cta-liens .pill-btn { text-decoration: none; }
+.cta-liens .pill-btn:not(.pill-btn-ghost) { background: var(--green); color: #0b0e0b; border-color: var(--green); font-weight: 600; }
+.erreur-champ { color: #ff9da1; font-size: 12px; line-height: 1.4; }
+.erreur-champ:empty { display: none; }
+.field.a-erreur input, .field.a-erreur select { border-bottom-color: #ff9da1; }
+.field-case .case-confidentialite { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: #dfe6f3; }
+.field-case input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--green); flex: none; }
+.field-case a, .card-note a { color: var(--green); }
+.champ-piege { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Signalo — Signaler. Améliorer. Votre ville.</title>
 <meta name="description" content="Signalo, la plateforme 100 % IA qui transforme chaque signalement citoyen en action concrète pour la ville : je signale, l'IA analyse, la mairie agit, le problème est résolu.">
+<meta name="signalo-api" content="https://api.redjam-signalo.com">
 <link rel="stylesheet" href="./css/styles.css?v=20261004p">
 <link rel="stylesheet" href="./css/signalo.css?v=20261004p">
 <script type="importmap">
@@ -162,7 +163,7 @@
   </nav>
   <div class="header-actions">
     <span class="header-counter" aria-hidden="true"><span id="brand-chapter">01</span><span class="counter-sep"></span>12</span>
-    <a href="#contact" class="contact-btn">Démo mairie <span class="btn-arrow">&#8599;</span></a>
+    <a href="./demonstration/" class="contact-btn">Démo mairie <span class="btn-arrow">&#8599;</span></a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="menu-btn-lines" aria-hidden="true"></span><span class="menu-btn-label">Menu</span></button>
   </div>
 </div>
@@ -345,7 +346,7 @@
         <li class="reveal" style="--i:2"><img class="neon-art" src="./assets/img/neon-m-intervenez.webp" alt="" width="144" height="127" decoding="async"><span class="ns-n">3</span><h3>Intervenez</h3><p>Les équipes agissent sur le terrain et mettent à jour le statut.</p></li>
         <li class="reveal" style="--i:3"><img class="neon-art" src="./assets/img/neon-m-informez.webp" alt="" width="144" height="127" decoding="async"><span class="ns-n">4</span><h3>Informez</h3><p>Le citoyen est notifié : la confiance et la transparence grandissent.</p></li>
       </ol>
-      <a class="btn btn-red reveal" href="#contact">Découvrir Signalo Mairie <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-red reveal" href="./demonstration/">Découvrir Signalo Mairie <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
@@ -501,35 +502,41 @@
               <div><span id="cdSeconds">00</span><small>sec</small></div>
             </div>
           </div>
+          <div class="cta-liens">
+            <a class="pill-btn" href="./demonstration/">Demander une démonstration <span class="arrow">&#8599;</span></a>
+            <a class="pill-btn pill-btn-ghost" href="./contact/">Contact et prise de rendez-vous <span class="arrow">&#8599;</span></a>
+          </div>
           <a class="contact-mail" href="mailto:contact@signalo.site">contact@signalo.site <span class="arrow">&#8599;</span></a>
         </div>
       </div>
       <form class="contact-card reveal" id="demoMairieForm" data-email="contact@signalo.site" novalidate>
         <div class="card-head"><span>Demande de démo mairie</span><span class="arrow">&#8599;</span></div>
         <div class="field-grid">
-          <div class="field field-wide">
+          <div class="field field-wide" data-champ="organisation">
             <label class="field-label" for="demoCommune">Nom de la mairie / commune <em>*</em></label>
             <div class="combo">
               <input type="text" name="commune" id="demoCommune" placeholder="Commencez à taper, ex. Versailles" autocomplete="off" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="communeSuggestions">
               <ul class="commune-suggestions" id="communeSuggestions" role="listbox" hidden></ul>
             </div>
             <span class="field-hint">Auto-remplissage disponible pour les communes françaises.</span>
+            <span class="erreur-champ"></span>
           </div>
-          <label class="field"><span class="field-label">Nom et prénom du contact <em>*</em></span><input type="text" name="contact" autocomplete="name" required></label>
-          <label class="field"><span class="field-label">Fonction</span>
-            <select name="fonction">
+          <label class="field" data-champ="nomComplet"><span class="field-label">Nom et prénom du contact <em>*</em></span><input type="text" name="contact" autocomplete="name" required><span class="erreur-champ"></span></label>
+          <label class="field" data-champ="fonction"><span class="field-label">Fonction <em>*</em></span>
+            <select name="fonction" required>
               <option value="">Sélectionner…</option>
               <option>Élu(e)</option>
               <option>DGS</option>
               <option>Service technique</option>
               <option>Autre</option>
             </select>
+            <span class="erreur-champ"></span>
           </label>
           <label class="field field-wide"><span class="field-label">Adresse de la mairie</span><input type="text" name="adresse" placeholder="Ex. 1 place de la Mairie" autocomplete="street-address"></label>
           <label class="field"><span class="field-label">Code postal</span><input type="text" name="code_postal" placeholder="Ex. 78000" inputmode="numeric" autocomplete="postal-code"></label>
           <label class="field"><span class="field-label">Ville</span><input type="text" name="ville" autocomplete="address-level2"></label>
-          <label class="field"><span class="field-label">E-mail professionnel <em>*</em></span><input type="email" name="email" placeholder="prenom.nom@mairie.fr" autocomplete="email" required></label>
-          <label class="field"><span class="field-label">Téléphone</span><input type="tel" name="telephone" autocomplete="tel"></label>
+          <label class="field" data-champ="email"><span class="field-label">E-mail professionnel <em>*</em></span><input type="email" name="email" placeholder="prenom.nom@mairie.fr" autocomplete="email" required><span class="erreur-champ"></span></label>
+          <label class="field" data-champ="telephone"><span class="field-label">Téléphone professionnel <em>*</em></span><input type="tel" name="telephone" autocomplete="tel" required><span class="erreur-champ"></span></label>
           <label class="field"><span class="field-label">Population</span><input type="number" name="population_exacte" min="0" placeholder="Ex. 37 000"></label>
           <label class="field"><span class="field-label">Besoin principal</span>
             <select name="besoin">
@@ -541,10 +548,15 @@
             </select>
           </label>
           <label class="field field-wide"><span class="field-label">Message <small>optionnel</small></span><textarea name="message" rows="3" placeholder="Votre contexte, vos questions…"></textarea></label>
+          <div class="field field-wide field-case" data-champ="confidentialite">
+            <label class="case-confidentialite"><input type="checkbox" name="confidentialite" required> <span>J'ai lu la <a href="https://signalo-page.vercel.app/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a> <em>*</em></span></label>
+            <span class="erreur-champ"></span>
+          </div>
+          <div class="champ-piege" aria-hidden="true"><label>Ne pas remplir <input type="text" name="site" tabindex="-1" autocomplete="off"></label></div>
         </div>
         <p class="form-msg" id="demoMairieMsg" role="alert"></p>
         <div class="card-foot">
-          <p class="card-note">Gratuit et sans engagement.<br>Réponse sous 24 h.</p>
+          <p class="card-note">Gratuit et sans engagement.<br><a href="./demonstration/">Ouvrir le formulaire en pleine page</a></p>
           <button type="submit" class="pill-btn"><span class="btn-label">Envoyer ma demande de démo</span> <span class="arrow">&#8599;</span></button>
         </div>
       </form>

@@ -1211,9 +1211,12 @@ function updateContact() {
 // ---- Mairie demo request ------------------------------------------------------
 // The commune field completes itself from the French government's open API
 // (geo.api.gouv.fr: postcode, town, population). On submit the request is POSTed as
-// JSON to DEMO_ENDPOINT when one is set; otherwise, or if that call fails, the
-// visitor's mail client opens with the request written out, ready to send.
-const DEMO_ENDPOINT = '';   // e.g. 'https://api.example.com/prospection/demo-mairie'
+// JSON to the RedJam API (<meta name="signalo-api">), which stores it in the CRM
+// (« Demandes commerciales »). The confirmation appears ONLY once the server has
+// stored the request; on failure the form keeps what was typed and says why.
+// The same request is also available as a full page: ./demonstration/.
+const DEMO_API = (document.querySelector('meta[name="signalo-api"]')?.content || 'https://api.redjam-signalo.com').replace(/\/+$/, '');
+const DEMO_ENDPOINT = `${DEMO_API}/demandes-commerciales/demonstration`;
 const OFFER_DAYS = 14;      // launch offer, counted from the visitor's first visit
 
 function offerDeadline() {
@@ -1358,6 +1361,60 @@ function buildMailto(form) {
     return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
 }
 
+// Same request, in the shape the RedJam API expects. The section's extra fields
+// (address, postcode, town, population, main need) are kept in the message.
+function apiRequest(form, key) {
+    const d = demoRequest(form);
+    const extra = [
+        ['Adresse de la mairie', d.adresse], ['Code postal', d.code_postal], ['Ville', d.ville],
+        ['Population', d.population_exacte != null ? d.population_exacte.toLocaleString('fr-FR') : null],
+        ['Besoin principal', d.besoin]
+    ].filter(([, v]) => v).map(([label, v]) => `${label} : ${v}`);
+    const message = [d.message, extra.length ? extra.join('\n') : null].filter(Boolean).join('\n\n');
+    return {
+        organisation: d.commune, codeInsee: d.commune_insee, nomComplet: d.contact, fonction: d.fonction,
+        email: d.email, telephone: d.telephone || '', message: message || null,
+        confidentialite: Boolean(form.elements.confidentialite?.checked), cleSoumission: key,
+        pageOrigine: location.href.split('#')[0], site: form.elements.site?.value || ''
+    };
+}
+
+function newKey() {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID().replace(/-/g, '');
+    return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+}
+
+function showFieldErrors(form, fields) {
+    form.querySelectorAll('.a-erreur').forEach(z => z.classList.remove('a-erreur'));
+    form.querySelectorAll('.erreur-champ').forEach(m => { m.textContent = ''; });
+    let first = null;
+    for (const [name, text] of Object.entries(fields || {})) {
+        const zone = form.querySelector(`[data-champ="${name}"]`);
+        if (!zone) continue;
+        zone.classList.add('a-erreur');
+        const slot = zone.querySelector('.erreur-champ');
+        if (slot) slot.textContent = text;
+        first ??= zone.querySelector('input, select, textarea');
+    }
+    first?.focus();
+    return Boolean(first);
+}
+
+function checkFields(form) {
+    const d = demoRequest(form);
+    const fields = {};
+    if (!d.commune) fields.organisation = 'Le nom de la commune est obligatoire.';
+    if (!d.contact) fields.nomComplet = 'Le nom et prénom est obligatoire.';
+    if (!d.fonction) fields.fonction = 'La fonction est obligatoire.';
+    if (!d.email) fields.email = "L'adresse e-mail est obligatoire.";
+    else if (!form.elements.email.checkValidity()) fields.email = 'Adresse e-mail invalide.';
+    const digits = (d.telephone || '').replace(/\D/g, '').length;
+    if (!d.telephone) fields.telephone = 'Le téléphone est obligatoire.';
+    else if (digits < 9 || digits > 15) fields.telephone = 'Numéro de téléphone invalide.';
+    if (!form.elements.confidentialite?.checked) fields.confidentialite = 'Merci de confirmer avoir lu la politique de confidentialité.';
+    return fields;
+}
+
 function setupContactForm() {
     const form = document.getElementById('demoMairieForm');
     if (!form) return;
@@ -1370,6 +1427,8 @@ function setupContactForm() {
     const button = form.querySelector('button[type="submit"]');
     const label = button.querySelector('.btn-label');
     const idleLabel = label.textContent;
+    let key = newKey();
+    let sending = false;
     const confirm = text => {
         overlayText.textContent = text;
         overlay.classList.add('is-visible');
@@ -1380,37 +1439,49 @@ function setupContactForm() {
     closeButton.addEventListener('click', close);
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-    const openMail = () => {
-        window.location.href = buildMailto(form);
-        confirm('Votre messagerie s’ouvre avec la demande prête à envoyer : il ne reste qu’à cliquer sur « Envoyer ».');
+    const fail = text => {
+        message.textContent = text;
+        message.className = 'form-msg is-error';
     };
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const request = demoRequest(form);
-        if (!request.commune || !request.contact || !request.email || !form.elements.email.checkValidity()) {
-            message.textContent = 'Merci de renseigner la mairie, le contact et un e-mail professionnel valide.';
-            message.className = 'form-msg is-error';
-            return;
-        }
+        if (sending) return;   // a double click never sends twice
         message.textContent = '';
         message.className = 'form-msg';
-        if (!DEMO_ENDPOINT) { openMail(); return; }
+        if (showFieldErrors(form, checkFields(form))) {
+            fail('Merci de compléter ou corriger les champs indiqués.');
+            return;
+        }
+        sending = true;
         button.disabled = true;
         label.textContent = 'Envoi en cours…';
         try {
-            const response = await fetch(DEMO_ENDPOINT, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...request, offer_deadline: offerDeadline().toISOString() })
-            });
-            if (!response.ok) throw new Error(`http_${response.status}`);
+            let response;
+            try {
+                response = await fetch(DEMO_ENDPOINT, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify(apiRequest(form, key))
+                });
+            } catch (error) {
+                fail('Impossible de joindre le serveur. Vérifiez votre connexion puis réessayez : vos informations sont conservées. Vous pouvez aussi écrire à contact@signalo.site.');
+                return;
+            }
+            let body = null;
+            try { body = await response.json(); } catch (error) { /* not JSON */ }
+            if (!response.ok || !body || body.success !== true) {
+                if (body?.error?.champs) showFieldErrors(form, body.error.champs);
+                fail(body?.error?.message || `La demande n'a pas pu être enregistrée (erreur ${response.status}). Merci de réessayer.`);
+                return;
+            }
             form.reset();
             delete form.dataset.insee;
             form.querySelectorAll('.is-autofilled').forEach(field => field.classList.remove('is-autofilled'));
-            confirm('Votre demande a été transmise, notre équipe vous recontacte sous 24 h.');
-        } catch (error) {
-            openMail();
+            showFieldErrors(form, {});
+            key = newKey();
+            confirm('Merci pour votre intérêt pour Signalo. Votre demande de démonstration a bien été enregistrée. Notre équipe reviendra vers vous pour organiser la présentation.');
         } finally {
+            sending = false;
             button.disabled = false;
             label.textContent = idleLabel;
         }
