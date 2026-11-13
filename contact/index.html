@@ -30,7 +30,7 @@
     </div>
     <ul class="engagements">
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span id="engagementDuree">Un rendez-vous court, à la date de votre choix.</span></li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>À distance ou en présentiel, selon votre préférence.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Par téléphone, à distance ou en présentiel, selon votre préférence.</span></li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Le créneau choisi vous est réservé dès la confirmation.</span></li>
     </ul>
     <p class="contact-direct">Une question ? <a href="mailto:contact@signalo.site">contact@signalo.site</a></p>
@@ -133,6 +133,7 @@
             <fieldset data-champ="modeRencontre" class="bloc-etape">
               <legend class="groupe-titre">Type de rendez-vous</legend>
               <div class="modes">
+                <label class="choix"><input type="radio" name="modeRencontre" value="telephone"><span>Par téléphone</span></label>
                 <label class="choix"><input type="radio" name="modeRencontre" value="distance"><span>À distance</span></label>
                 <label class="choix"><input type="radio" name="modeRencontre" value="presentiel"><span>En présentiel</span></label>
               </div>
@@ -207,7 +208,13 @@ const montrerErreur = (texte) => { erreur.textContent = texte; erreur.hidden = !
 const v = (n) => String(form.elements[n]?.value || '').trim();
 const nomFuseau = (tz) => (tz === 'Europe/Paris' ? 'heure de Paris' : tz);
 const dateLongue = (date) => new Date(`${date}T12:00:00Z`).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-const libMode = (m) => (m === 'presentiel' ? 'En présentiel' : m === 'distance' ? 'À distance' : '—');
+const libMode = (m) => (m === 'presentiel' ? 'En présentiel' : m === 'distance' ? 'À distance' : m === 'telephone' ? 'Par téléphone' : '—');
+// Lien « Prendre un rendez-vous téléphonique » d'un e-mail (#telephone) : le mode téléphone est présélectionné.
+if (location.hash === '#telephone') {
+    const tel = form.querySelector('input[name="modeRencontre"][value="telephone"]');
+    if (tel) tel.checked = true;
+    document.getElementById('titre').textContent = 'Prenons rendez-vous par téléphone';
+}
 
 /* ---------- étapes ---------- */
 function allerEtape(n) {
@@ -360,7 +367,7 @@ form.addEventListener('submit', async (e) => {
     const mode = form.querySelector('input[name="modeRencontre"]:checked')?.value || null;
     const champs = controlerChamps(form, { confidentialite: regles.confidentialite });
     if (avecAgenda && !choisi) champs.creneau = 'Choisissez un jour puis un horaire.';
-    if (avecAgenda && !mode) champs.modeRencontre = 'Indiquez si vous préférez une rencontre à distance ou en présentiel.';
+    if (avecAgenda && !mode) champs.modeRencontre = 'Indiquez si vous préférez un rendez-vous par téléphone, à distance ou en présentiel.';
     if (afficherErreursChamps(form, champs)) { montrerErreur('Merci de compléter les éléments indiqués.'); return; }
     effacerErreursChamps(form);
     enCours = true;
@@ -373,7 +380,7 @@ form.addEventListener('submit', async (e) => {
             email: v('email'), telephone: v('telephone'), objet: v('objet'), message: v('message'),
             creneau: choisi, modeRencontre: choisi ? mode : null,
             confidentialite: form.elements.confidentialite.checked, cleSoumission: cle, ref,
-            pageOrigine: `${location.origin}${location.pathname}`, site: form.elements.site.value,
+            pageOrigine: `${location.origin}${location.pathname}${/^#[a-z0-9-]{1,40}$/i.test(location.hash) ? location.hash : ''}`, site: form.elements.site.value,
         });
         form.hidden = true;
         document.getElementById('progression').hidden = true;

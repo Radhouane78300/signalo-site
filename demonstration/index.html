@@ -56,6 +56,11 @@
             <ul class="suggestions" id="suggestionsCommune" role="listbox" hidden></ul>
             <span class="erreur-champ"></span>
           </div>
+          <div class="champ" data-champ="ville">
+            <label for="ville">Ville <span class="facultatif">(facultatif)</span></label>
+            <input id="ville" name="ville" type="text" autocomplete="address-level2" maxlength="150" placeholder="Si différente de la collectivité (intercommunalité…)">
+            <span class="erreur-champ"></span>
+          </div>
           <div class="champ" data-champ="nomComplet">
             <label for="nomComplet">Nom et prénom</label>
             <input id="nomComplet" name="nomComplet" type="text" autocomplete="name" required maxlength="200">
@@ -118,6 +123,15 @@ const ref = lireRef();
 let codeInsee = null;
 let cle = nouvelleCle();
 let enCours = false;
+// Parcours « essai de 14 jours » (lien #essai-14-jours d'un e-mail) : même formulaire, demande identifiée comme essai.
+const essai = location.hash === '#essai-14-jours';
+if (essai) {
+    document.title = 'Demander un essai de 14 jours — Signalo';
+    document.getElementById('titre').textContent = 'Testez Signalo pendant 14 jours';
+    document.querySelector('.intro').textContent = "Nous préparons l'espace de votre commune ; les 14 jours démarrent à votre première connexion. Sans engagement de souscription.";
+    bouton.textContent = 'Demander mon essai de 14 jours';
+}
+const libelleBouton = bouton.textContent;
 
 // Le lien « Prendre rendez-vous » conserve le jeton personnel (même destinataire).
 if (ref) document.getElementById('lienContact').href = `../contact/?ref=${ref}`;
@@ -156,14 +170,15 @@ form.addEventListener('submit', async (e) => {
     try {
         const r = await envoyerDemonstration({
             organisation: v('organisation'), codeInsee, nomComplet: v('nomComplet'), fonction: v('fonction'),
-            email: v('email'), telephone: v('telephone'), message: v('message') || null,
+            email: v('email'), telephone: v('telephone'), message: v('message') || null, ville: v('ville') || null,
             confidentialite: form.elements.confidentialite.checked, cleSoumission: cle, ref,
-            pageOrigine: `${location.origin}${location.pathname}`, site: form.elements.site.value,
+            pageOrigine: `${location.origin}${location.pathname}${essai ? '#essai-14-jours' : ''}`, site: form.elements.site.value,
         });
         // Confirmation affichée UNIQUEMENT après l'enregistrement confirmé par le serveur.
         form.hidden = true;
         document.getElementById('succesCommune').textContent = r.organisation || v('organisation');
         document.getElementById('reference').textContent = r.reference;
+        if (essai) document.querySelector('#succes p').textContent = "Merci. Votre demande d'essai de 14 jours a bien été enregistrée. Notre équipe vous contacte pour préparer l'espace de votre commune.";
         const ok = document.getElementById('succes');
         ok.hidden = false;
         ok.focus();
@@ -176,7 +191,7 @@ form.addEventListener('submit', async (e) => {
     } finally {
         enCours = false;
         bouton.disabled = false;
-        bouton.textContent = 'Demander ma démonstration';
+        bouton.textContent = libelleBouton;
     }
 });
 </script>
